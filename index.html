@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html = style="height: 100%;">
+  <head>
+    <title>Fr4nsson's Genshin Impact Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="scripts/leaflet.css">
+    <link rel="stylesheet" href="scripts/all.min.css"> <!-- Font Awesome Free 5.15.1 -->
+    <script src="scripts/leaflet.js"></script>
+    <script src="scripts/Leaflet.LocationShare.js"></script>
+    <script src="scripts/leaflet.ajax.min.js"></script>
+    <script src="scripts/leaflet-heat.js"></script>
+  </head>
+  
+  <body style="height: 100%;margin: 0;">
+    <div id="map" style="width: 100%; height: 100%; background: #000000;"></div>
+    
+	<!-- Workaround for 1px lines appearing in some browsers due to fractional transforms
+    and resulting anti-aliasing.-->
+	<style>
+	.leaflet-tile-container img {
+	width: 256.5px !important;
+	height: 256.5px !important;
+	}
+	</style>
+    <script type="text/javascript">
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//------------------------------------------------- Main ---------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+		// Creating the Map
+		var map = L.map('map').setView([-69.3, -35.9], 4);  // Mt. Tianheng
+
+		map.createPane('CustomPane');
+		map.getPane('CustomPane').style.zIndex = 600; // Needed in order to put markers in front of farm route lines
+
+	    L.tileLayer('maps/teyvat/{z}/{x}/{y}.png', {
+	    continuousWorld: false,
+	    noWrap: true,
+	    minZoom: 2,
+	    maxZoom: 6,
+	    zoomControl: false,
+		minNativeZoom: 2,
+		maxNativeZoom: 6,
+		updateInterval: 200,
+	    }).addTo(map);
+
+	    // Remove old zoomControl and add new one.
+	    map.zoomControl.remove();
+	    L.control.zoom({
+	    position: 'bottomright'
+		}).addTo(map);
+
+		// OnEachFeature function
+		function oef(feature, layer) {
+			if (feature.properties && feature.properties.name) {
+				layer.bindTooltip(feature.properties.name, {
+					opacity: 1.00,
+					direction: 'top',
+					offset: [0, -7]
+				});
+			}
+			if (feature.properties && feature.properties.name && feature.properties.description) {
+				layer.bindPopup("<center><b> " + feature.properties.name + "</center></b><br>" + feature.properties.description);
+			}
+			if (feature.properties && feature.properties.name && feature.properties.description && feature.properties.description.startsWith("Inside") ){
+				layer.setStyle({
+					opacity: 0.25,
+					fillOpacity: 0.35,
+				});
+			}
+			if (feature.properties && feature.properties.name && feature.properties.description && feature.properties.name.startsWith("* Teleport") ){
+				layer.setStyle({
+					color: "LightSkyBlue",
+					dashArray: 10,
+					weight: 3,
+					opacity: 0.50,
+				});
+			}
+		}
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//--------------------------------------------- Info Button ------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//----------------------------------------------- Teleport -------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// geoJSON URL'S
+		var TeleportURL 		= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/Teleport.geojson"
+		/*
+		// Stuff for CircleMarker
+		function TeleportMarker(feature, latlng){
+		let options = {
+		radius: 5,
+		fillColor: "dodgerblue",	// TeleportColor
+		color: "white",				// Stroke Color
+		weight: 1,					// Stroke Weight
+		opacity: 0.95,				// Stroke Opacity
+		fillOpacity: 0.95,
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.circleMarker(latlng, options);
+		}
+		*/
+		
+		// Stuff for CustomMarkerIcon
+		var TeleportIcon = L.icon({
+		iconUrl: 'markers/TeleportMarker.png',
+		iconSize:      [18, 26],	// size of the icon
+		iconAnchor:    [9, 13],		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		// Stuff for CustomMarker
+		function TeleportMarker(feature, latlng){
+		let options = {
+		opacity: 1,					// Marker Opacity
+		pane: 'CustomPane'			//To Adjust Z-Index
+		}
+		return L.marker(latlng, {icon: TeleportIcon});
+		}
+		
+		// Load .geoJSON
+		var Teleport			= new L.GeoJSON.AJAX([TeleportURL],{pointToLayer:TeleportMarker,onEachFeature:oef}); //.addTo(map)
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//------------------------------------------------ Statue --------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// geoJSON URL'S
+		var StatueURL 					= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/Statue.geojson"
+		/*
+		// Stuff for CircleMarker
+		function StatueMarker(feature, latlng){
+		let options = {
+		radius: 5,
+		fillColor: "blueviolet", 	// StatueColor
+		color: "white",				// Stroke Color
+		weight: 1,					// Stroke Weight
+		opacity: 0.95,				// Stroke Opacity
+		fillOpacity: 0.95,
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.circleMarker(latlng, options);
+		}
+		*/
+		
+		// Stuff for CustomMarkerIcon
+		var StatueIcon = L.icon({
+		iconUrl: 'markers/StatueMarker.png',
+		iconSize:      [24, 34],	// size of the icon
+		iconAnchor:    [12, 17],	// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		// Stuff for CustomMarker
+		function StatueMarker(feature, latlng){
+		let options = {
+		opacity: 1,					// Marker Opacity
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.marker(latlng, {icon: StatueIcon});
+		}
+		
+
+		// Load .geoJSON
+		var Statue						= new L.GeoJSON.AJAX([StatueURL],{pointToLayer:StatueMarker,onEachFeature:oef}); //.addTo(map)
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//------------------------------------------------ Domain --------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// geoJSON URL'S
+		var DomainURL 					= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/Domain.geojson"
+		/*
+		// Stuff for CircleMarker
+		function DomainMarker(feature, latlng){
+		let options = {
+		radius: 5,
+		fillColor: "dimgray", 	// DomainColor
+		color: "white",			// Stroke Color
+		weight: 1,				// Stroke Weight
+		opacity: 0.95,			// Stroke Opacity
+		fillOpacity: 0.95,
+		pane: 'CustomPane'		// To Adjust Z-Index
+		}
+		return L.circleMarker(latlng, options);
+		}
+		*/
+		
+		// Stuff for CustomMarkerIcon
+		var DomainIcon = L.icon({
+		iconUrl: 'markers/DomainMarker.png',
+		iconSize:      [20, 20],	// size of the icon
+		iconAnchor:    [10, 10],	// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		// Stuff for CustomMarker
+		function DomainMarker(feature, latlng){
+		let options = {
+		opacity: 1,					// Marker Opacity
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.marker(latlng, {icon: DomainIcon});
+		}
+		
+
+		// Load .geoJSON
+		var Domain						= new L.GeoJSON.AJAX([DomainURL],{pointToLayer:DomainMarker,onEachFeature:oef});
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//------------------------------------------------- Cave ---------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+		
+		// geoJSON URL'S
+		var CaveURL 		= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/Cave.geojson"
+
+		/*
+		// Stuff for CircleMarker
+		function CaveMarker(feature, latlng){
+		let options = {
+		radius: 5,
+		fillColor: "lightgrey", // CaveColor
+		color: "white",			// Stroke Color
+		weight: 1,				// Stroke Weight
+		opacity: 0.95,			// Stroke Opacity
+		fillOpacity: 0.95,
+		pane: 'CustomPane'		// To Adjust Z-Index
+		}
+		return L.circleMarker(latlng, options);
+		}
+		*/
+		// Stuff for CustomMarkerIcon
+		var CaveIcon = L.icon({
+		iconUrl: 'markers/CaveMarker.png',
+		iconSize:      [20, 14],	// size of the icon
+		iconAnchor:    [10, 7],		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		// Stuff for CustomMarker
+		function CaveMarker(feature, latlng){
+		let options = {
+		opacity: 1,					// Marker Opacity
+		pane: 'CustomPane'			//To Adjust Z-Index
+		}
+		return L.marker(latlng, {icon: CaveIcon});
+		}
+
+		// Load .geoJSON
+		var Cave			= new L.GeoJSON.AJAX([CaveURL],{pointToLayer:CaveMarker,onEachFeature:oef}); //.addTo(map)
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//------------------------------------------------ Chest ---------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// geoJSON URL'S
+		var ChestURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/Chest.geojson"
+		//var ChestFarmRouteURL	= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/FarmRouteChest.geojson"
+
+		// Stuff for CircleMarker
+		function ChestMarker(feature, latlng){
+		let options = {
+		radius: 5,
+		fillColor: "saddlebrown", 	// ChestColor
+		color: "white",				// Stroke Color
+		weight: 1,					// Stroke Weight
+		opacity: 0.95,				// Stroke Opacity
+		fillOpacity: 0.95,
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.circleMarker(latlng, options);
+		}
+		/*
+		// Stuff for lines
+		var ChestLines = {
+    	"color": "#b22222",
+    	"weight": 5,
+    	"opacity": 0.95
+		};
+		*/
+		// For Heat Map
+		chesthmcoords = []; //define an array to store coordinates
+		onEachFeature: function ChestJson2Heat(feature, layer) {
+		chesthmcoords.push([feature.geometry.coordinates[1],feature.geometry.coordinates[0]]);
+		}
+
+		// Load .geoJSON
+		var Chest 				= new L.GeoJSON.AJAX([ChestURL],{pointToLayer:ChestMarker,onEachFeature:oef});
+		var ChestGetCoords 		= new L.GeoJSON.AJAX([ChestURL],{onEachFeature:ChestJson2Heat});
+		var ChestHeat 			= L.heatLayer(chesthmcoords)
+		//var ChestFarmRoute 	= new L.GeoJSON.AJAX([ChestFarmRouteURL],{style:ChestLines,onEachFeature:oef});
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//------------------------------------------- Artifact Fodder ----------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// geoJSON URL'S
+		var ArtifactFodderURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/ArtifactFodder.geojson"
+
+		// Stuff for CircleMarker
+		function ArtifactFodderMarker(feature, latlng){
+		let options = {
+		radius: 5,
+		fillColor: "tan", 			// ArtifactFodderColor
+		color: "white",				// Stroke Color
+		weight: 1,					// Stroke Weight
+		opacity: 0.95,				// Stroke Opacity
+		fillOpacity: 0.95,
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.circleMarker(latlng, options);
+		}
+		/*
+		// Stuff for lines
+		var ArtifactFodderLines = {
+    	"color": "#b22222",
+    	"weight": 5,
+    	"opacity": 0.95
+		};
+		*/
+		// For Heat Map
+		artifactFodderhmcoords = []; //define an array to store coordinates
+		onEachFeature: function ArtifactFodderJson2Heat(feature, layer) {
+		artifactFodderhmcoords.push([feature.geometry.coordinates[1],feature.geometry.coordinates[0]]);
+		}
+
+		// Load .geoJSON
+		var ArtifactFodder 				= new L.GeoJSON.AJAX([ArtifactFodderURL],{pointToLayer:ArtifactFodderMarker,onEachFeature:oef});
+		var ArtifactFodderGetCoords 		= new L.GeoJSON.AJAX([ArtifactFodderURL],{onEachFeature:ArtifactFodderJson2Heat});
+		var ArtifactFodderHeat 			= L.heatLayer(artifactFodderhmcoords)
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//------------------------------------------- Electro Crystal ----------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// geoJSON URL'S
+		var ElectroCrystalURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/ElectroCrystal.geojson"
+
+		// Stuff for CircleMarker
+		function ElectroCrystalMarker(feature, latlng){
+		let options = {
+		radius: 5,
+		fillColor: "darkorchid",		// ElectroCrystalColor
+		color: "white",					// Stroke Color
+		weight: 1,						// Stroke Weight
+		opacity: 0.95,					// Stroke Opacity
+		fillOpacity: 0.95,
+		pane: 'CustomPane'				// To Adjust Z-Index
+		}
+		return L.circleMarker(latlng, options);
+		}
+
+		// For Heat Map
+		electroCrystalhmcoords = []; //define an array to store coordinates
+		onEachFeature: function ElectroCrystalJson2Heat(feature, layer) {
+		electroCrystalhmcoords.push([feature.geometry.coordinates[1],feature.geometry.coordinates[0]]);
+		}
+
+		// Load .geoJSON
+		var ElectroCrystal 				= new L.GeoJSON.AJAX([ElectroCrystalURL],{pointToLayer:ElectroCrystalMarker,onEachFeature:oef});
+		var ElectroCrystalGetCoords 	= new L.GeoJSON.AJAX([ElectroCrystalURL],{onEachFeature:ElectroCrystalJson2Heat});
+		var ElectroCrystalHeat 			= L.heatLayer(electroCrystalhmcoords)
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//------------------------------------------ Noctilucous Jade ----------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// geoJSON URL'S
+		var NoctilucousJadeURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/NoctilucousJade.geojson"
+
+		// Stuff for CircleMarker
+		function NoctilucousJadeMarker(feature, latlng){
+		let options = {
+		radius: 5,
+		fillColor: "slateblue", // NoctilucousJadeColor
+		color: "white",			// Stroke Color
+		weight: 1,				// Stroke Weight
+		opacity: 0.95,			// Stroke Opacity
+		fillOpacity: 0.95,
+		pane: 'CustomPane'		// To Adjust Z-Index
+		}
+		return L.circleMarker(latlng, options);
+		}
+
+		// For Heat Map
+		noctilucousJadehmcoords = []; //define an array to store coordinates
+		onEachFeature: function NoctilucousJadeJson2Heat(feature, layer) {
+		noctilucousJadehmcoords.push([feature.geometry.coordinates[1],feature.geometry.coordinates[0]]);
+		}
+
+		// Load .geoJSON
+		var NoctilucousJade 				= new L.GeoJSON.AJAX([NoctilucousJadeURL],{pointToLayer:NoctilucousJadeMarker,onEachFeature:oef});
+		var NoctilucousJadeGetCoords 		= new L.GeoJSON.AJAX([NoctilucousJadeURL],{onEachFeature:NoctilucousJadeJson2Heat});
+		var NoctilucousJadeHeat 			= L.heatLayer(noctilucousJadehmcoords)
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//---------------------------------------------- Cor Lapis -------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// geoJSON URL'S
+		var CorLapisURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/CorLapis.geojson"
+
+		// Stuff for CircleMarker
+		function CorLapisMarker(feature, latlng){
+		let options = {
+		radius: 5,
+		fillColor: "darkorange",	// CorLapisColor
+		color: "white",				// Stroke Color
+		weight: 1,					// Stroke Weight
+		opacity: 0.95,				// Stroke Opacity
+		fillOpacity: 0.95,
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.circleMarker(latlng, options);
+		}
+
+		// For Heat Map
+		corLapishmcoords = []; //define an array to store coordinates
+		onEachFeature: function CorLapisJson2Heat(feature, layer) {
+		corLapishmcoords.push([feature.geometry.coordinates[1],feature.geometry.coordinates[0]]);
+		}
+
+		// Load .geoJSON
+		var CorLapis 				= new L.GeoJSON.AJAX([CorLapisURL],{pointToLayer:CorLapisMarker,onEachFeature:oef});
+		var CorLapisGetCoords 		= new L.GeoJSON.AJAX([CorLapisURL],{onEachFeature:CorLapisJson2Heat});
+		var CorLapisHeat 			= L.heatLayer(corLapishmcoords)
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//-------------------------------------------- Crystal Chunk -----------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// geoJSON URL'S
+		var CrystalChunkURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/CrystalChunk.geojson"
+
+		// Stuff for CircleMarker
+		function CrystalChunkMarker(feature, latlng){
+		let options = {
+		radius: 5,
+		fillColor: "aqua",			// CrystalChunkColor
+		color: "white",				// Stroke Color
+		weight: 1,					// Stroke Weight
+		opacity: 0.95,				// Stroke Opacity
+		fillOpacity: 0.95,
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.circleMarker(latlng, options);
+		}
+
+		// For Heat Map
+		crystalChunkhmcoords = []; //define an array to store coordinates
+		onEachFeature: function CrystalChunkJson2Heat(feature, layer) {
+		crystalChunkhmcoords.push([feature.geometry.coordinates[1],feature.geometry.coordinates[0]]);
+		}
+
+		// Load .geoJSON
+		var CrystalChunk 			= new L.GeoJSON.AJAX([CrystalChunkURL],{pointToLayer:CrystalChunkMarker,onEachFeature:oef});
+		var CrystalChunkGetCoords 	= new L.GeoJSON.AJAX([CrystalChunkURL],{onEachFeature:CrystalChunkJson2Heat});
+		var CrystalChunkHeat 		= L.heatLayer(crystalChunkhmcoords)
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//------------------------------------------- White Iron Chunk ---------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// geoJSON URL'S
+		var WhiteIronChunkURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/WhiteIronChunk.geojson"
+
+		// Stuff for CircleMarker
+		function WhiteIronChunkMarker(feature, latlng){
+		let options = {
+		radius: 5,
+		fillColor: "darkgray",		// WhiteIronChunkColor
+		color: "white",				// Stroke Color
+		weight: 1,					// Stroke Weight
+		opacity: 0.95,				// Stroke Opacity
+		fillOpacity: 0.95,
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.circleMarker(latlng, options);
+		}
+
+		// For Heat Map
+		whiteIronChunkhmcoords = []; //define an array to store coordinates
+		onEachFeature: function WhiteIronChunkJson2Heat(feature, layer) {
+		whiteIronChunkhmcoords.push([feature.geometry.coordinates[1],feature.geometry.coordinates[0]]);
+		}
+
+		// Load .geoJSON
+		var WhiteIronChunk 			= new L.GeoJSON.AJAX([WhiteIronChunkURL],{pointToLayer:WhiteIronChunkMarker,onEachFeature:oef});
+		var WhiteIronChunkGetCoords 	= new L.GeoJSON.AJAX([WhiteIronChunkURL],{onEachFeature:WhiteIronChunkJson2Heat});
+		var WhiteIronChunkHeat 		= L.heatLayer(whiteIronChunkhmcoords)
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//--------------------------------------------- Jueyun Chili -----------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// geoJSON URL'S
+		var JueyunChiliURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/JueyunChili.geojson"
+
+		// Stuff for CircleMarker
+		function JueyunChiliMarker(feature, latlng){
+		let options = {
+		radius: 5,
+		fillColor: "red",			// JueyunChiliColor
+		color: "white",				// Stroke Color
+		weight: 1,					// Stroke Weight
+		opacity: 0.95,				// Stroke Opacity
+		fillOpacity: 0.95,
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.circleMarker(latlng, options);
+		}
+
+		// For Heat Map
+		jueyunChilihmcoords = []; //define an array to store coordinates
+		onEachFeature: function JueyunChiliJson2Heat(feature, layer) {
+		jueyunChilihmcoords.push([feature.geometry.coordinates[1],feature.geometry.coordinates[0]]);
+		}
+
+		// Load .geoJSON
+		var JueyunChili 			= new L.GeoJSON.AJAX([JueyunChiliURL],{pointToLayer:JueyunChiliMarker,onEachFeature:oef});
+		var JueyunChiliGetCoords 	= new L.GeoJSON.AJAX([JueyunChiliURL],{onEachFeature:JueyunChiliJson2Heat});
+		var JueyunChiliHeat 		= L.heatLayer(jueyunChilihmcoords)
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//---------------------------------------------- Lotus Head ------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// geoJSON URL'S
+		var LotusHeadURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/LotusHead.geojson"
+
+		// Stuff for CircleMarker
+		function LotusHeadMarker(feature, latlng){
+		let options = {
+		radius: 5,
+		fillColor: "yellowgreen",	// LotusHeadColor
+		color: "white",				// Stroke Color
+		weight: 1,					// Stroke Weight
+		opacity: 0.95,				// Stroke Opacity
+		fillOpacity: 0.95,
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.circleMarker(latlng, options);
+		}
+
+		// For Heat Map
+		lotusHeadhmcoords = []; //define an array to store coordinates
+		onEachFeature: function LotusHeadJson2Heat(feature, layer) {
+		lotusHeadhmcoords.push([feature.geometry.coordinates[1],feature.geometry.coordinates[0]]);
+		}
+
+		// Load .geoJSON
+		var LotusHead 			= new L.GeoJSON.AJAX([LotusHeadURL],{pointToLayer:LotusHeadMarker,onEachFeature:oef});
+		var LotusHeadGetCoords 	= new L.GeoJSON.AJAX([LotusHeadURL],{onEachFeature:LotusHeadJson2Heat});
+		var LotusHeadHeat 		= L.heatLayer(lotusHeadhmcoords)
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//----------------------------------------------- Raw Meat -------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// geoJSON URL'S
+		var RawMeatURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/RawMeat.geojson"
+
+		// Stuff for CircleMarker
+		function RawMeatMarker(feature, latlng){
+		let options = {
+		radius: 5,
+		fillColor: "salmon",	// RawMeatColor
+		color: "white",			// Stroke Color
+		weight: 1,				// Stroke Weight
+		opacity: 0.95,			// Stroke Opacity
+		fillOpacity: 0.95,
+		pane: 'CustomPane'		// To Adjust Z-Index
+		}
+		return L.circleMarker(latlng, options);
+		}
+
+		// For Heat Map
+		rawMeathmcoords = []; //define an array to store coordinates
+		onEachFeature: function RawMeatJson2Heat(feature, layer) {
+		rawMeathmcoords.push([feature.geometry.coordinates[1],feature.geometry.coordinates[0]]);
+		}
+
+		// Load .geoJSON
+		var RawMeat 			= new L.GeoJSON.AJAX([RawMeatURL],{pointToLayer:RawMeatMarker,onEachFeature:oef});
+		var RawMeatGetCoords 	= new L.GeoJSON.AJAX([RawMeatURL],{onEachFeature:RawMeatJson2Heat});
+		var RawMeatHeat 		= L.heatLayer(rawMeathmcoords)
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//------------------------------------------------- Fish ---------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// geoJSON URL'S
+		var FishURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/Fish.geojson"
+
+		// Stuff for CircleMarker
+		function FishMarker(feature, latlng){
+		let options = {
+		radius: 5,
+		fillColor: "lightpink",	// FishColor
+		color: "white",			// Stroke Color
+		weight: 1,				// Stroke Weight
+		opacity: 0.95,			// Stroke Opacity
+		fillOpacity: 0.95,
+		pane: 'CustomPane'		// To Adjust Z-Index
+		}
+		return L.circleMarker(latlng, options);
+		}
+
+		// For Heat Map
+		fishhmcoords = []; //define an array to store coordinates
+		onEachFeature: function FishJson2Heat(feature, layer) {
+		fishhmcoords.push([feature.geometry.coordinates[1],feature.geometry.coordinates[0]]);
+		}
+
+		// Load .geoJSON
+		var Fish 				= new L.GeoJSON.AJAX([FishURL],{pointToLayer:FishMarker,onEachFeature:oef});
+		var FishGetCoords 		= new L.GeoJSON.AJAX([FishURL],{onEachFeature:FishJson2Heat});
+		var FishHeat 			= L.heatLayer(fishhmcoords)
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//------------------------------------------------- Crab ---------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// geoJSON URL'S
+		var CrabURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/Crab.geojson"
+
+		// Stuff for CircleMarker
+		function CrabMarker(feature, latlng){
+		let options = {
+		radius: 5,
+		fillColor: "lightcoral",	// CrabColor
+		color: "white",				// Stroke Color
+		weight: 1,					// Stroke Weight
+		opacity: 0.95,				// Stroke Opacity
+		fillOpacity: 0.95,
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.circleMarker(latlng, options);
+		}
+
+		// For Heat Map
+		crabhmcoords = []; //define an array to store coordinates
+		onEachFeature: function CrabJson2Heat(feature, layer) {
+		crabhmcoords.push([feature.geometry.coordinates[1],feature.geometry.coordinates[0]]);
+		}
+
+		// Load .geoJSON
+		var Crab 					= new L.GeoJSON.AJAX([CrabURL],{pointToLayer:CrabMarker,onEachFeature:oef});
+		var CrabGetCoords 			= new L.GeoJSON.AJAX([CrabURL],{onEachFeature:CrabJson2Heat});
+		var CrabHeat 				= L.heatLayer(crabhmcoords)
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//------------------------------------------------- Boss ---------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// geoJSON URL'S
+		var BossURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/Boss.geojson"
+
+		// Stuff for CircleMarker
+		function BossMarker(feature, latlng){
+		let options = {
+		radius: 5,
+		fillColor: "firebrick",	// BossColor
+		color: "white",			// Stroke Color
+		weight: 1,				// Stroke Weight
+		opacity: 0.95,			// Stroke Opacity
+		fillOpacity: 0.95,
+		pane: 'CustomPane'		// To Adjust Z-Index
+		}
+		return L.circleMarker(latlng, options);
+		}
+
+		// For Heat Map
+		bosshmcoords = []; //define an array to store coordinates
+		onEachFeature: function BossJson2Heat(feature, layer) {
+		bosshmcoords.push([feature.geometry.coordinates[1],feature.geometry.coordinates[0]]);
+		}
+
+		// Load .geoJSON
+		var Boss 				= new L.GeoJSON.AJAX([BossURL],{pointToLayer:BossMarker,onEachFeature:oef});
+		var BossGetCoords 		= new L.GeoJSON.AJAX([BossURL],{onEachFeature:BossJson2Heat});
+		var BossHeat 			= L.heatLayer(bosshmcoords)
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//------------------------------------------ Farm Route - Boss ---------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// geoJSON URL'S
+		var FarmRouteBossURL	= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/FarmRouteBoss.geojson"
+
+		// Stuff for lines
+		var BossLines = {
+    	"color": "firebrick",
+    	"weight": 5,
+    	//"dashArray": 6,
+    	"opacity": 0.95
+		};
+
+		// Load .geoJSON
+		var FarmRouteBoss 		= new L.GeoJSON.AJAX([FarmRouteBossURL],{style:BossLines,onEachFeature:oef});
+
+		// FarmRouteBossGroup
+    	var FarmRouteBossGroup = L.layerGroup([
+    	Teleport,
+    	Statue,
+    	Boss,
+    	FarmRouteBoss,
+    	])
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//----------------------------------------- Farm Route - Mineral -------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// geoJSON URL'S
+		var FarmRouteMineralURL	= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/FarmRouteMineral.geojson"
+
+		// Stuff for lines
+		var FarmRouteMineralLines = {
+    	"color": "firebrick",
+    	"weight": 5,
+    	//"dashArray": 6,
+    	"opacity": 0.95
+		};
+
+		// Load .geoJSON
+		var FarmRouteMineral 		= new L.GeoJSON.AJAX([FarmRouteMineralURL],{style:FarmRouteMineralLines,onEachFeature:oef});
+
+		// FarmRouteMineralGroup
+    	var FarmRouteMineralGroup = L.layerGroup([
+    	ElectroCrystal,
+    	NoctilucousJade,
+    	CorLapis,
+    	CrystalChunk,
+    	WhiteIronChunk,
+    	Teleport,
+    	Statue,
+    	Domain,
+    	Cave,
+    	FarmRouteMineral,
+    	])
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//----------------------------------------------- Overlays -------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// Add to map on load
+    	var DefaultShow = L.layerGroup([
+    	Teleport,
+    	Statue,
+    	Domain,
+    	Cave,
+    	])
+
+    	DefaultShow.addTo(map)
+
+    	// Overlay Menu top left
+    	var mapOverlays={
+		"Teleport"										: Teleport,
+		"Statue"										: Statue,
+		"Domain"										: Domain,
+		"Cave"											: Cave,
+		"Chest"											: Chest,
+		"Chest - Heat Map"								: ChestHeat,
+		"Artifact Fodder"								: ArtifactFodder,
+		"Artifact Fodder - Heat Map"					: ArtifactFodderHeat,
+		"Electro Crystal"								: ElectroCrystal,
+		"Electro Crystal - Heat Map"					: ElectroCrystalHeat,
+		"Noctilucous Jade"								: NoctilucousJade,
+		"Noctilucous Jade - Heat Map"					: NoctilucousJadeHeat,
+		"Cor Lapis"										: CorLapis,
+		"Cor Lapis - Heat Map"							: CorLapisHeat,
+		"Crystal Chunk"									: CrystalChunk,
+		"Crystal Chunk - Heat Map"						: CrystalChunkHeat,
+		"White Iron Chunk"								: WhiteIronChunk,
+		"White Iron Chunk - Heat Map"					: WhiteIronChunkHeat,
+		"Jueyun Chili"									: JueyunChili,
+		"Jueyun Chili - Heat Map"						: JueyunChiliHeat,
+		"Lotus Head"									: LotusHead,
+		"Lotus Head - Heat Map"							: LotusHeadHeat,
+		"Raw Meat"										: RawMeat,
+		"Raw Meat - Heat Map"							: RawMeatHeat,
+		"Fish"											: Fish,
+		"Fish - Heat Map"								: FishHeat,
+		"Crab"											: Crab,
+		"Crab - Heat Map"								: CrabHeat,
+		"Boss"											: Boss,
+		"Boss - Heat Map"								: BossHeat,
+		"Farm Route - Boss"								: FarmRouteBossGroup,
+		"Farm Route - Mineral"							: FarmRouteMineralGroup,
+		}
+
+		var layerControl = L.control.layers(null, mapOverlays, {position:'topleft'}).addTo(map);
+
+    </script>
+  </body>
+</html>
