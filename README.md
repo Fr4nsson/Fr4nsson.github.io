@@ -7,4 +7,5 @@ Every marker is carefully placed by me personally so expect precision.
 
 I will update the map as long as i play.
 
-https://raw.githubusercontent.com/Fr4nsson/Fr4nsson.github.io/main/Preview1.png
+![Preview1](https://raw.githubusercontent.com/Fr4nsson/Fr4nsson.github.io/main/Preview1.png?raw=true)
+
