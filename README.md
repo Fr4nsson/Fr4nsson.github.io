@@ -1,6 +1,4 @@
-------------------------------
-Fr4nsson's Genshin Impact Map
-------------------------------
+# Fr4nsson's Genshin Impact Map
 
 Activate/Deactivate layers with the dropdown menu to the top left.
 Share location by clicking the button at the bottom right and then dragging the marker and adding a message (optional).
