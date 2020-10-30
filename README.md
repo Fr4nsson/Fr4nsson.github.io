@@ -1,5 +1,7 @@
 # Fr4nsson's Genshin Impact Map
-
+<br>
+<p><a href="https://fr4nsson.github.io/">Click here to go to the map</a></p>
+<br>
 <b>Info</b><br>
 16384 x 16384 pixel map with high quality text made by me.<br>
 Every marker is carefully placed by me personally so expect precision.<br>
