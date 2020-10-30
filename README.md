@@ -8,10 +8,10 @@ Every marker is carefully placed by me personally so expect precision.
 I will update the map as long as i play.
 
 <p>
-  <img src="https://raw.githubusercontent.com/Fr4nsson/Fr4nsson.github.io/main/Preview1.png" width="960" title="">
+  <img src="https://raw.githubusercontent.com/Fr4nsson/Fr4nsson.github.io/main/Preview1.png">
   
-  <img src="https://raw.githubusercontent.com/Fr4nsson/Fr4nsson.github.io/main/Preview2.png" width="960" alt="">
+  <img src="https://raw.githubusercontent.com/Fr4nsson/Fr4nsson.github.io/main/Preview2.png">
   
-  <img src="https://raw.githubusercontent.com/Fr4nsson/Fr4nsson.github.io/main/Preview3.png" width="960" alt="">
+  <img src="https://raw.githubusercontent.com/Fr4nsson/Fr4nsson.github.io/main/Preview3.png">
 </p>
 
