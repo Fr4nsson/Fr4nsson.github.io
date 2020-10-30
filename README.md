@@ -1,5 +1,3 @@
-# Fr4nsson.github.io
-
 # Fr4nsson's Genshin Impact Map
 
 Activate/Deactivate layers with the dropdown menu to the top left.
