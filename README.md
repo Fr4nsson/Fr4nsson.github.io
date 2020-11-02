@@ -4,8 +4,7 @@
 <br>
 <b>Info</b><br>
 16384 x 16384 pixel map with high quality text made by me.<br>
-Every marker is carefully placed by me personally so expect precision.<br>
-I will update the map as long as i play.<br><br>
+Every marker is carefully placed by me personally so expect precision.<br><br>
 
 <b>Navigation</b><br>
 Activate/Deactivate layers with the dropdown menu to the top left.<br>
