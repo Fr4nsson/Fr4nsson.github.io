@@ -1,11 +1,4 @@
-# Fr4nsson.github.io
-------------------------------
-Fr4nsson's Genshin Impact Map
-------------------------------
-
-Activate/Deactivate layers with the dropdown menu to the top left.
-Share location by clicking the button at the bottom right and then dragging the marker and adding a message (optional).
-
-Every marker is carefully placed by me personally so expect precision.
-
-I will update the map as long as i play.
+# Fr4nsson's Genshin Impact Map
+<br>
+<p><a href="https://fr4nsson.github.io/">Click here to go to the map</a></p>
+<br>
