@@ -17,10 +17,12 @@
 	<!-- Workaround for 1px lines appearing in some browsers due to fractional transforms
     and resulting anti-aliasing.-->
 	<style>
+
 	.leaflet-tile-container img {
 	width: 256.5px !important;
 	height: 256.5px !important;
 	}
+
 	</style>
     <script type="text/javascript">
 
@@ -37,11 +39,11 @@
 	    L.tileLayer('maps/teyvat/{z}/{x}/{y}.png', {
 	    continuousWorld: false,
 	    noWrap: true,
-	    minZoom: 2,
+	    minZoom: 3,
 	    maxZoom: 6,
 	    zoomControl: false,
-		minNativeZoom: 2,
-		maxNativeZoom: 6,
+		minNativeZoom: 3,
+		maxNativeZoom: 5,
 		updateInterval: 200,
 	    }).addTo(map);
 
@@ -50,6 +52,8 @@
 	    L.control.zoom({
 	    position: 'bottomright'
 		}).addTo(map);
+
+		var myRenderer = L.svg({ opacity: 0.25 });
 
 		// OnEachFeature function
 		function oef(feature, layer) {
@@ -63,18 +67,11 @@
 			if (feature.properties && feature.properties.name && feature.properties.description) {
 				layer.bindPopup("<center><b> " + feature.properties.name + "</center></b><br>" + feature.properties.description);
 			}
-			if (feature.properties && feature.properties.name && feature.properties.description && feature.properties.description.startsWith("Inside") ){
-				layer.setStyle({
-					opacity: 0.25,
-					fillOpacity: 0.35,
-				});
-			}
 			if (feature.properties && feature.properties.name && feature.properties.description && feature.properties.name.startsWith("* Teleport") ){
 				layer.setStyle({
 					color: "LightSkyBlue",
 					dashArray: 10,
 					weight: 3,
-					opacity: 0.50,
 				});
 			}
 		}
@@ -254,7 +251,7 @@
 		function CaveMarker(feature, latlng){
 		let options = {
 		opacity: 1,					// Marker Opacity
-		pane: 'CustomPane'			//To Adjust Z-Index
+		pane: 'CustomPane'			// To Adjust Z-Index
 		}
 		return L.marker(latlng, {icon: CaveIcon});
 		}
@@ -271,6 +268,7 @@
 		var ChestURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/Chest.geojson"
 		//var ChestFarmRouteURL	= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/FarmRouteChest.geojson"
 
+		/*
 		// Stuff for CircleMarker
 		function ChestMarker(feature, latlng){
 		let options = {
@@ -284,6 +282,26 @@
 		}
 		return L.circleMarker(latlng, options);
 		}
+		*/
+
+		// Stuff for CustomMarkerIcon
+		var ChestIcon = L.icon({
+		iconUrl: 'markers/ChestMarker.png',
+		iconSize:      [24, 24],	// size of the icon
+		iconAnchor:    [12, 12],		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		// Stuff for CustomMarker
+		function ChestMarker(feature, latlng){
+		let options = {
+		opacity: 1,					// Marker Opacity
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.marker(latlng, {icon: ChestIcon});
+		}
+
 		/*
 		// Stuff for lines
 		var ChestLines = {
@@ -292,16 +310,9 @@
     	"opacity": 0.95
 		};
 		*/
-		// For Heat Map
-		chesthmcoords = []; //define an array to store coordinates
-		onEachFeature: function ChestJson2Heat(feature, layer) {
-		chesthmcoords.push([feature.geometry.coordinates[1],feature.geometry.coordinates[0]]);
-		}
 
 		// Load .geoJSON
 		var Chest 				= new L.GeoJSON.AJAX([ChestURL],{pointToLayer:ChestMarker,onEachFeature:oef});
-		var ChestGetCoords 		= new L.GeoJSON.AJAX([ChestURL],{onEachFeature:ChestJson2Heat});
-		var ChestHeat 			= L.heatLayer(chesthmcoords)
 		//var ChestFarmRoute 	= new L.GeoJSON.AJAX([ChestFarmRouteURL],{style:ChestLines,onEachFeature:oef});
 
 	//----------------------------------------------------------------------------------------------------------------------
@@ -312,6 +323,7 @@
 		// geoJSON URL'S
 		var ArtifactFodderURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/ArtifactFodder.geojson"
 
+		/*
 		// Stuff for CircleMarker
 		function ArtifactFodderMarker(feature, latlng){
 		let options = {
@@ -333,16 +345,27 @@
     	"opacity": 0.95
 		};
 		*/
-		// For Heat Map
-		artifactFodderhmcoords = []; //define an array to store coordinates
-		onEachFeature: function ArtifactFodderJson2Heat(feature, layer) {
-		artifactFodderhmcoords.push([feature.geometry.coordinates[1],feature.geometry.coordinates[0]]);
+
+		// Stuff for CustomMarkerIcon
+		var ArtifactFodderIcon = L.icon({
+		iconUrl: 'markers/ArtifactFodderMarker.png',
+		iconSize:      [18, 18],	// size of the icon
+		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		// Stuff for CustomMarker
+		function ArtifactFodderMarker(feature, latlng){
+		let options = {
+		opacity: 1,					// Marker Opacity
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.marker(latlng, {icon: ArtifactFodderIcon});
 		}
 
 		// Load .geoJSON
 		var ArtifactFodder 				= new L.GeoJSON.AJAX([ArtifactFodderURL],{pointToLayer:ArtifactFodderMarker,onEachFeature:oef});
-		var ArtifactFodderGetCoords 		= new L.GeoJSON.AJAX([ArtifactFodderURL],{onEachFeature:ArtifactFodderJson2Heat});
-		var ArtifactFodderHeat 			= L.heatLayer(artifactFodderhmcoords)
 
 	//----------------------------------------------------------------------------------------------------------------------
 	//------------------------------------------- Electro Crystal ----------------------------------------------------------
@@ -352,6 +375,7 @@
 		// geoJSON URL'S
 		var ElectroCrystalURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/ElectroCrystal.geojson"
 
+		/*
 		// Stuff for CircleMarker
 		function ElectroCrystalMarker(feature, latlng){
 		let options = {
@@ -365,17 +389,28 @@
 		}
 		return L.circleMarker(latlng, options);
 		}
+		*/
 
-		// For Heat Map
-		electroCrystalhmcoords = []; //define an array to store coordinates
-		onEachFeature: function ElectroCrystalJson2Heat(feature, layer) {
-		electroCrystalhmcoords.push([feature.geometry.coordinates[1],feature.geometry.coordinates[0]]);
+		// Stuff for CustomMarkerIcon
+		var ElectroCrystalIcon = L.icon({
+		iconUrl: 'markers/ElectroCrystalMarker.png',
+		iconSize:      [18, 18],	// size of the icon
+		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		// Stuff for CustomMarker
+		function ElectroCrystalMarker(feature, latlng){
+		let options = {
+		opacity: 1,					// Marker Opacity
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.marker(latlng, {icon: ElectroCrystalIcon});
 		}
 
 		// Load .geoJSON
 		var ElectroCrystal 				= new L.GeoJSON.AJAX([ElectroCrystalURL],{pointToLayer:ElectroCrystalMarker,onEachFeature:oef});
-		var ElectroCrystalGetCoords 	= new L.GeoJSON.AJAX([ElectroCrystalURL],{onEachFeature:ElectroCrystalJson2Heat});
-		var ElectroCrystalHeat 			= L.heatLayer(electroCrystalhmcoords)
 
 	//----------------------------------------------------------------------------------------------------------------------
 	//------------------------------------------ Noctilucous Jade ----------------------------------------------------------
@@ -385,6 +420,7 @@
 		// geoJSON URL'S
 		var NoctilucousJadeURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/NoctilucousJade.geojson"
 
+		/*
 		// Stuff for CircleMarker
 		function NoctilucousJadeMarker(feature, latlng){
 		let options = {
@@ -398,17 +434,28 @@
 		}
 		return L.circleMarker(latlng, options);
 		}
+		*/
 
-		// For Heat Map
-		noctilucousJadehmcoords = []; //define an array to store coordinates
-		onEachFeature: function NoctilucousJadeJson2Heat(feature, layer) {
-		noctilucousJadehmcoords.push([feature.geometry.coordinates[1],feature.geometry.coordinates[0]]);
+		// Stuff for CustomMarkerIcon
+		var NoctilucousJadeIcon = L.icon({
+		iconUrl: 'markers/NoctilucousJadeMarker.png',
+		iconSize:      [18, 18],	// size of the icon
+		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		// Stuff for CustomMarker
+		function NoctilucousJadeMarker(feature, latlng){
+		let options = {
+		opacity: 1,					// Marker Opacity
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.marker(latlng, {icon: NoctilucousJadeIcon});
 		}
 
 		// Load .geoJSON
 		var NoctilucousJade 				= new L.GeoJSON.AJAX([NoctilucousJadeURL],{pointToLayer:NoctilucousJadeMarker,onEachFeature:oef});
-		var NoctilucousJadeGetCoords 		= new L.GeoJSON.AJAX([NoctilucousJadeURL],{onEachFeature:NoctilucousJadeJson2Heat});
-		var NoctilucousJadeHeat 			= L.heatLayer(noctilucousJadehmcoords)
 
 	//----------------------------------------------------------------------------------------------------------------------
 	//---------------------------------------------- Cor Lapis -------------------------------------------------------------
@@ -418,6 +465,7 @@
 		// geoJSON URL'S
 		var CorLapisURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/CorLapis.geojson"
 
+		/*
 		// Stuff for CircleMarker
 		function CorLapisMarker(feature, latlng){
 		let options = {
@@ -431,17 +479,28 @@
 		}
 		return L.circleMarker(latlng, options);
 		}
+		*/
 
-		// For Heat Map
-		corLapishmcoords = []; //define an array to store coordinates
-		onEachFeature: function CorLapisJson2Heat(feature, layer) {
-		corLapishmcoords.push([feature.geometry.coordinates[1],feature.geometry.coordinates[0]]);
+		// Stuff for CustomMarkerIcon
+		var CorLapisIcon = L.icon({
+		iconUrl: 'markers/CorLapisMarker.png',
+		iconSize:      [18, 18],	// size of the icon
+		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		// Stuff for CustomMarker
+		function CorLapisMarker(feature, latlng){
+		let options = {
+		opacity: 1,					// Marker Opacity
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.marker(latlng, {icon: CorLapisIcon});
 		}
 
 		// Load .geoJSON
 		var CorLapis 				= new L.GeoJSON.AJAX([CorLapisURL],{pointToLayer:CorLapisMarker,onEachFeature:oef});
-		var CorLapisGetCoords 		= new L.GeoJSON.AJAX([CorLapisURL],{onEachFeature:CorLapisJson2Heat});
-		var CorLapisHeat 			= L.heatLayer(corLapishmcoords)
 
 	//----------------------------------------------------------------------------------------------------------------------
 	//-------------------------------------------- Crystal Chunk -----------------------------------------------------------
@@ -451,6 +510,7 @@
 		// geoJSON URL'S
 		var CrystalChunkURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/CrystalChunk.geojson"
 
+		/*
 		// Stuff for CircleMarker
 		function CrystalChunkMarker(feature, latlng){
 		let options = {
@@ -464,17 +524,73 @@
 		}
 		return L.circleMarker(latlng, options);
 		}
+		*/
 
-		// For Heat Map
-		crystalChunkhmcoords = []; //define an array to store coordinates
-		onEachFeature: function CrystalChunkJson2Heat(feature, layer) {
-		crystalChunkhmcoords.push([feature.geometry.coordinates[1],feature.geometry.coordinates[0]]);
+		// Stuff for CustomMarkerIcon
+		var CrystalChunkIcon = L.icon({
+		iconUrl: 'markers/CrystalChunkMarker.png',
+		iconSize:      [18, 18],	// size of the icon
+		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		// Stuff for CustomMarker
+		function CrystalChunkMarker(feature, latlng){
+		let options = {
+		opacity: 1,					// Marker Opacity
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.marker(latlng, {icon: CrystalChunkIcon});
 		}
 
 		// Load .geoJSON
 		var CrystalChunk 			= new L.GeoJSON.AJAX([CrystalChunkURL],{pointToLayer:CrystalChunkMarker,onEachFeature:oef});
-		var CrystalChunkGetCoords 	= new L.GeoJSON.AJAX([CrystalChunkURL],{onEachFeature:CrystalChunkJson2Heat});
-		var CrystalChunkHeat 		= L.heatLayer(crystalChunkhmcoords)
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//---------------------------------------- Magical Crystal Chunk -------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// geoJSON URL'S
+		var MagicalCrystalChunkURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/MagicalCrystalChunk.geojson"
+
+		/*
+		// Stuff for CircleMarker
+		function MagicalCrystalChunkMarker(feature, latlng){
+		let options = {
+		radius: 5,
+		fillColor: "aqua",			// MagicalCrystalChunkColor
+		color: "white",				// Stroke Color
+		weight: 1,					// Stroke Weight
+		opacity: 0.95,				// Stroke Opacity
+		fillOpacity: 0.95,
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.circleMarker(latlng, options);
+		}
+		*/
+
+		// Stuff for CustomMarkerIcon
+		var MagicalCrystalChunkIcon = L.icon({
+		iconUrl: 'markers/MagicalCrystalChunkMarker.png',
+		iconSize:      [18, 18],	// size of the icon
+		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		// Stuff for CustomMarker
+		function MagicalCrystalChunkMarker(feature, latlng){
+		let options = {
+		opacity: 1,					// Marker Opacity
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.marker(latlng, {icon: MagicalCrystalChunkIcon});
+		}
+
+		// Load .geoJSON
+		var MagicalCrystalChunk 			= new L.GeoJSON.AJAX([MagicalCrystalChunkURL],{pointToLayer:MagicalCrystalChunkMarker,onEachFeature:oef});
 
 	//----------------------------------------------------------------------------------------------------------------------
 	//------------------------------------------- White Iron Chunk ---------------------------------------------------------
@@ -484,6 +600,7 @@
 		// geoJSON URL'S
 		var WhiteIronChunkURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/WhiteIronChunk.geojson"
 
+		/*
 		// Stuff for CircleMarker
 		function WhiteIronChunkMarker(feature, latlng){
 		let options = {
@@ -497,17 +614,350 @@
 		}
 		return L.circleMarker(latlng, options);
 		}
+		*/
 
-		// For Heat Map
-		whiteIronChunkhmcoords = []; //define an array to store coordinates
-		onEachFeature: function WhiteIronChunkJson2Heat(feature, layer) {
-		whiteIronChunkhmcoords.push([feature.geometry.coordinates[1],feature.geometry.coordinates[0]]);
+		// Stuff for CustomMarkerIcon
+		var WhiteIronChunkIcon = L.icon({
+		iconUrl: 'markers/WhiteIronChunkMarker.png',
+		iconSize:      [18, 18],	// size of the icon
+		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		// Stuff for CustomMarker
+		function WhiteIronChunkMarker(feature, latlng){
+		let options = {
+		opacity: 1,					// Marker Opacity
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.marker(latlng, {icon: WhiteIronChunkIcon});
 		}
 
 		// Load .geoJSON
 		var WhiteIronChunk 			= new L.GeoJSON.AJAX([WhiteIronChunkURL],{pointToLayer:WhiteIronChunkMarker,onEachFeature:oef});
-		var WhiteIronChunkGetCoords 	= new L.GeoJSON.AJAX([WhiteIronChunkURL],{onEachFeature:WhiteIronChunkJson2Heat});
-		var WhiteIronChunkHeat 		= L.heatLayer(whiteIronChunkhmcoords)
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//----------------------------------------------- Wolfhook -------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// geoJSON URL'S
+		var WolfhookURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/Wolfhook.geojson"
+
+		/*
+		// Stuff for CircleMarker
+		function WolfhookMarker(feature, latlng){
+		let options = {
+		radius: 5,
+		fillColor: "salmon",	// Wolfhook Color
+		color: "white",			// Stroke Color
+		weight: 1,				// Stroke Weight
+		opacity: 0.95,			// Stroke Opacity
+		fillOpacity: 0.95,
+		pane: 'CustomPane'		// To Adjust Z-Index
+		}
+		return L.circleMarker(latlng, options);
+		}
+		*/
+
+		// Stuff for CustomMarkerIcon
+		var WolfhookIcon = L.icon({
+		iconUrl: 'markers/WolfhookMarker.png',
+		iconSize:      [18, 18],	// size of the icon
+		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		// Stuff for CustomMarker
+		function WolfhookMarker(feature, latlng){
+		let options = {
+		opacity: 1,					// Marker Opacity
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.marker(latlng, {icon: WolfhookIcon});
+		}
+
+		// Load .geoJSON
+		var Wolfhook 			= new L.GeoJSON.AJAX([WolfhookURL],{pointToLayer:WolfhookMarker,onEachFeature:oef});
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//------------------------------------------- Small Lamp Grass ---------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// geoJSON URL'S
+		var SmallLampGrassURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/SmallLampGrass.geojson"
+
+		/*
+		// Stuff for CircleMarker
+		function SmallLampGrassMarker(feature, latlng){
+		let options = {
+		radius: 5,
+		fillColor: "salmon",	// SmallLampGrass Color
+		color: "white",			// Stroke Color
+		weight: 1,				// Stroke Weight
+		opacity: 0.95,			// Stroke Opacity
+		fillOpacity: 0.95,
+		pane: 'CustomPane'		// To Adjust Z-Index
+		}
+		return L.circleMarker(latlng, options);
+		}
+		*/
+
+		// Stuff for CustomMarkerIcon
+		var SmallLampGrassIcon = L.icon({
+		iconUrl: 'markers/SmallLampGrassMarker.png',
+		iconSize:      [18, 18],	// size of the icon
+		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		// Stuff for CustomMarker
+		function SmallLampGrassMarker(feature, latlng){
+		let options = {
+		opacity: 1,					// Marker Opacity
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.marker(latlng, {icon: SmallLampGrassIcon});
+		}
+
+		// Load .geoJSON
+		var SmallLampGrass 			= new L.GeoJSON.AJAX([SmallLampGrassURL],{pointToLayer:SmallLampGrassMarker,onEachFeature:oef});
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//---------------------------------------------- Starconch -------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// geoJSON URL'S
+		var StarconchURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/Starconch.geojson"
+
+		// Stuff for CustomMarkerIcon
+		var StarconchIcon = L.icon({
+		iconUrl: 'markers/StarconchMarker.png',
+		iconSize:      [18, 18],	// size of the icon
+		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		// Stuff for CustomMarker
+		function StarconchMarker(feature, latlng){
+		let options = {
+		opacity: 1,					// Marker Opacity
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.marker(latlng, {icon: StarconchIcon});
+		}
+
+		// Load .geoJSON
+		var Starconch 			= new L.GeoJSON.AJAX([StarconchURL],{pointToLayer:StarconchMarker,onEachFeature:oef});
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//--------------------------------------------- Bamboo Shoot -----------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// geoJSON URL'S
+		var BambooShootURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/BambooShoot.geojson"
+
+		// Stuff for CustomMarkerIcon
+		var BambooShootIcon = L.icon({
+		iconUrl: 'markers/BambooShootMarker.png',
+		iconSize:      [18, 18],	// size of the icon
+		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		// Stuff for CustomMarker
+		function BambooShootMarker(feature, latlng){
+		let options = {
+		opacity: 1,					// Marker Opacity
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.marker(latlng, {icon: BambooShootIcon});
+		}
+
+		// Load .geoJSON
+		var BambooShoot 			= new L.GeoJSON.AJAX([BambooShootURL],{pointToLayer:BambooShootMarker,onEachFeature:oef});
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//----------------------------------------------- Mushroom -------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// geoJSON URL'S
+		var MushroomURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/Mushroom.geojson"
+
+		// Stuff for CustomMarkerIcon
+		var MushroomIcon = L.icon({
+		iconUrl: 'markers/MushroomMarker.png',
+		iconSize:      [18, 18],	// size of the icon
+		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		// Stuff for CustomMarker
+		function MushroomMarker(feature, latlng){
+		let options = {
+		opacity: 1,					// Marker Opacity
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.marker(latlng, {icon: MushroomIcon});
+		}
+
+		// Load .geoJSON
+		var Mushroom 			= new L.GeoJSON.AJAX([MushroomURL],{pointToLayer:MushroomMarker,onEachFeature:oef});
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//--------------------------------------------- Sweet Flower -----------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// geoJSON URL'S
+		var SweetFlowerURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/SweetFlower.geojson"
+
+		// Stuff for CustomMarkerIcon
+		var SweetFlowerIcon = L.icon({
+		iconUrl: 'markers/SweetFlowerMarker.png',
+		iconSize:      [18, 18],	// size of the icon
+		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		// Stuff for CustomMarker
+		function SweetFlowerMarker(feature, latlng){
+		let options = {
+		opacity: 1,					// Marker Opacity
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.marker(latlng, {icon: SweetFlowerIcon});
+		}
+
+		// Load .geoJSON
+		var SweetFlower 			= new L.GeoJSON.AJAX([SweetFlowerURL],{pointToLayer:SweetFlowerMarker,onEachFeature:oef});
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//-------------------------------------------- Dandelion Seed ----------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// geoJSON URL'S
+		var DandelionSeedURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/DandelionSeed.geojson"
+
+		// Stuff for CustomMarkerIcon
+		var DandelionSeedIcon = L.icon({
+		iconUrl: 'markers/DandelionSeedMarker.png',
+		iconSize:      [18, 18],	// size of the icon
+		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		// Stuff for CustomMarker
+		function DandelionSeedMarker(feature, latlng){
+		let options = {
+		opacity: 1,					// Marker Opacity
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.marker(latlng, {icon: DandelionSeedIcon});
+		}
+
+		// Load .geoJSON
+		var DandelionSeed 			= new L.GeoJSON.AJAX([DandelionSeedURL],{pointToLayer:DandelionSeedMarker,onEachFeature:oef});
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//------------------------------------------------- Mint ---------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// geoJSON URL'S
+		var MintURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/Mint.geojson"
+
+		// Stuff for CustomMarkerIcon
+		var MintIcon = L.icon({
+		iconUrl: 'markers/MintMarker.png',
+		iconSize:      [18, 18],	// size of the icon
+		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		// Stuff for CustomMarker
+		function MintMarker(feature, latlng){
+		let options = {
+		opacity: 1,					// Marker Opacity
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.marker(latlng, {icon: MintIcon});
+		}
+
+		// Load .geoJSON
+		var Mint 			= new L.GeoJSON.AJAX([MintURL],{pointToLayer:MintMarker,onEachFeature:oef});
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//------------------------------------------------- Berry --------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// geoJSON URL'S
+		var BerryURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/Berry.geojson"
+
+		// Stuff for CustomMarkerIcon
+		var BerryIcon = L.icon({
+		iconUrl: 'markers/BerryMarker.png',
+		iconSize:      [18, 18],	// size of the icon
+		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		// Stuff for CustomMarker
+		function BerryMarker(feature, latlng){
+		let options = {
+		opacity: 1,					// Marker Opacity
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.marker(latlng, {icon: BerryIcon});
+		}
+
+		// Load .geoJSON
+		var Berry 			= new L.GeoJSON.AJAX([BerryURL],{pointToLayer:BerryMarker,onEachFeature:oef});
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//----------------------------------------------- Bird Egg -------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// geoJSON URL'S
+		var BirdEggURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/BirdEgg.geojson"
+
+		// Stuff for CustomMarkerIcon
+		var BirdEggIcon = L.icon({
+		iconUrl: 'markers/BirdEggMarker.png',
+		iconSize:      [18, 18],	// size of the icon
+		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		// Stuff for CustomMarker
+		function BirdEggMarker(feature, latlng){
+		let options = {
+		opacity: 1,					// Marker Opacity
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.marker(latlng, {icon: BirdEggIcon});
+		}
+
+		// Load .geoJSON
+		var BirdEgg 			= new L.GeoJSON.AJAX([BirdEggURL],{pointToLayer:BirdEggMarker,onEachFeature:oef});
 
 	//----------------------------------------------------------------------------------------------------------------------
 	//--------------------------------------------- Jueyun Chili -----------------------------------------------------------
@@ -517,6 +967,7 @@
 		// geoJSON URL'S
 		var JueyunChiliURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/JueyunChili.geojson"
 
+		/*
 		// Stuff for CircleMarker
 		function JueyunChiliMarker(feature, latlng){
 		let options = {
@@ -530,17 +981,28 @@
 		}
 		return L.circleMarker(latlng, options);
 		}
+		*/
 
-		// For Heat Map
-		jueyunChilihmcoords = []; //define an array to store coordinates
-		onEachFeature: function JueyunChiliJson2Heat(feature, layer) {
-		jueyunChilihmcoords.push([feature.geometry.coordinates[1],feature.geometry.coordinates[0]]);
+		// Stuff for CustomMarkerIcon
+		var JueyunChiliIcon = L.icon({
+		iconUrl: 'markers/JueyunChiliMarker.png',
+		iconSize:      [18, 18],	// size of the icon
+		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		// Stuff for CustomMarker
+		function JueyunChiliMarker(feature, latlng){
+		let options = {
+		opacity: 1,					// Marker Opacity
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.marker(latlng, {icon: JueyunChiliIcon});
 		}
 
 		// Load .geoJSON
 		var JueyunChili 			= new L.GeoJSON.AJAX([JueyunChiliURL],{pointToLayer:JueyunChiliMarker,onEachFeature:oef});
-		var JueyunChiliGetCoords 	= new L.GeoJSON.AJAX([JueyunChiliURL],{onEachFeature:JueyunChiliJson2Heat});
-		var JueyunChiliHeat 		= L.heatLayer(jueyunChilihmcoords)
 
 	//----------------------------------------------------------------------------------------------------------------------
 	//---------------------------------------------- Lotus Head ------------------------------------------------------------
@@ -550,6 +1012,7 @@
 		// geoJSON URL'S
 		var LotusHeadURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/LotusHead.geojson"
 
+		/*
 		// Stuff for CircleMarker
 		function LotusHeadMarker(feature, latlng){
 		let options = {
@@ -563,17 +1026,28 @@
 		}
 		return L.circleMarker(latlng, options);
 		}
+		*/
 
-		// For Heat Map
-		lotusHeadhmcoords = []; //define an array to store coordinates
-		onEachFeature: function LotusHeadJson2Heat(feature, layer) {
-		lotusHeadhmcoords.push([feature.geometry.coordinates[1],feature.geometry.coordinates[0]]);
+		// Stuff for CustomMarkerIcon
+		var LotusHeadIcon = L.icon({
+		iconUrl: 'markers/LotusHeadMarker.png',
+		iconSize:      [18, 18],	// size of the icon
+		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		// Stuff for CustomMarker
+		function LotusHeadMarker(feature, latlng){
+		let options = {
+		opacity: 1,					// Marker Opacity
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.marker(latlng, {icon: LotusHeadIcon});
 		}
 
 		// Load .geoJSON
 		var LotusHead 			= new L.GeoJSON.AJAX([LotusHeadURL],{pointToLayer:LotusHeadMarker,onEachFeature:oef});
-		var LotusHeadGetCoords 	= new L.GeoJSON.AJAX([LotusHeadURL],{onEachFeature:LotusHeadJson2Heat});
-		var LotusHeadHeat 		= L.heatLayer(lotusHeadhmcoords)
 
 	//----------------------------------------------------------------------------------------------------------------------
 	//----------------------------------------------- Raw Meat -------------------------------------------------------------
@@ -583,6 +1057,7 @@
 		// geoJSON URL'S
 		var RawMeatURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/RawMeat.geojson"
 
+		/*
 		// Stuff for CircleMarker
 		function RawMeatMarker(feature, latlng){
 		let options = {
@@ -596,17 +1071,73 @@
 		}
 		return L.circleMarker(latlng, options);
 		}
+		*/
 
-		// For Heat Map
-		rawMeathmcoords = []; //define an array to store coordinates
-		onEachFeature: function RawMeatJson2Heat(feature, layer) {
-		rawMeathmcoords.push([feature.geometry.coordinates[1],feature.geometry.coordinates[0]]);
+		// Stuff for CustomMarkerIcon
+		var RawMeatIcon = L.icon({
+		iconUrl: 'markers/RawMeatMarker.png',
+		iconSize:      [18, 18],	// size of the icon
+		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		// Stuff for CustomMarker
+		function RawMeatMarker(feature, latlng){
+		let options = {
+		opacity: 1,					// Marker Opacity
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.marker(latlng, {icon: RawMeatIcon});
 		}
 
 		// Load .geoJSON
 		var RawMeat 			= new L.GeoJSON.AJAX([RawMeatURL],{pointToLayer:RawMeatMarker,onEachFeature:oef});
-		var RawMeatGetCoords 	= new L.GeoJSON.AJAX([RawMeatURL],{onEachFeature:RawMeatJson2Heat});
-		var RawMeatHeat 		= L.heatLayer(rawMeathmcoords)
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//------------------------------------------------- Fowl ---------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// geoJSON URL'S
+		var FowlURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/Fowl.geojson"
+
+		/*
+		// Stuff for CircleMarker
+		function FowlMarker(feature, latlng){
+		let options = {
+		radius: 5,
+		fillColor: "lightsalmon",	// Fowl Color
+		color: "white",				// Stroke Color
+		weight: 1,					// Stroke Weight
+		opacity: 0.95,				// Stroke Opacity
+		fillOpacity: 0.95,
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.circleMarker(latlng, options);
+		}
+		*/
+
+		// Stuff for CustomMarkerIcon
+		var FowlIcon = L.icon({
+		iconUrl: 'markers/FowlMarker.png',
+		iconSize:      [18, 18],	// size of the icon
+		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		// Stuff for CustomMarker
+		function FowlMarker(feature, latlng){
+		let options = {
+		opacity: 1,					// Marker Opacity
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.marker(latlng, {icon: FowlIcon});
+		}
+
+		// Load .geoJSON
+		var Fowl 			= new L.GeoJSON.AJAX([FowlURL],{pointToLayer:FowlMarker,onEachFeature:oef});
 
 	//----------------------------------------------------------------------------------------------------------------------
 	//------------------------------------------------- Fish ---------------------------------------------------------------
@@ -616,6 +1147,7 @@
 		// geoJSON URL'S
 		var FishURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/Fish.geojson"
 
+		/*
 		// Stuff for CircleMarker
 		function FishMarker(feature, latlng){
 		let options = {
@@ -629,17 +1161,28 @@
 		}
 		return L.circleMarker(latlng, options);
 		}
+		*/
 
-		// For Heat Map
-		fishhmcoords = []; //define an array to store coordinates
-		onEachFeature: function FishJson2Heat(feature, layer) {
-		fishhmcoords.push([feature.geometry.coordinates[1],feature.geometry.coordinates[0]]);
+		// Stuff for CustomMarkerIcon
+		var FishIcon = L.icon({
+		iconUrl: 'markers/FishMarker.png',
+		iconSize:      [18, 18],	// size of the icon
+		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		// Stuff for CustomMarker
+		function FishMarker(feature, latlng){
+		let options = {
+		opacity: 1,					// Marker Opacity
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.marker(latlng, {icon: FishIcon});
 		}
 
 		// Load .geoJSON
 		var Fish 				= new L.GeoJSON.AJAX([FishURL],{pointToLayer:FishMarker,onEachFeature:oef});
-		var FishGetCoords 		= new L.GeoJSON.AJAX([FishURL],{onEachFeature:FishJson2Heat});
-		var FishHeat 			= L.heatLayer(fishhmcoords)
 
 	//----------------------------------------------------------------------------------------------------------------------
 	//------------------------------------------------- Crab ---------------------------------------------------------------
@@ -649,6 +1192,7 @@
 		// geoJSON URL'S
 		var CrabURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/Crab.geojson"
 
+		/*
 		// Stuff for CircleMarker
 		function CrabMarker(feature, latlng){
 		let options = {
@@ -662,17 +1206,28 @@
 		}
 		return L.circleMarker(latlng, options);
 		}
+		*/
 
-		// For Heat Map
-		crabhmcoords = []; //define an array to store coordinates
-		onEachFeature: function CrabJson2Heat(feature, layer) {
-		crabhmcoords.push([feature.geometry.coordinates[1],feature.geometry.coordinates[0]]);
+		// Stuff for CustomMarkerIcon
+		var CrabIcon = L.icon({
+		iconUrl: 'markers/CrabMarker.png',
+		iconSize:      [18, 18],	// size of the icon
+		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		// Stuff for CustomMarker
+		function CrabMarker(feature, latlng){
+		let options = {
+		opacity: 1,					// Marker Opacity
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.marker(latlng, {icon: CrabIcon});
 		}
 
 		// Load .geoJSON
 		var Crab 					= new L.GeoJSON.AJAX([CrabURL],{pointToLayer:CrabMarker,onEachFeature:oef});
-		var CrabGetCoords 			= new L.GeoJSON.AJAX([CrabURL],{onEachFeature:CrabJson2Heat});
-		var CrabHeat 				= L.heatLayer(crabhmcoords)
 
 	//----------------------------------------------------------------------------------------------------------------------
 	//------------------------------------------------- Boss ---------------------------------------------------------------
@@ -696,16 +1251,8 @@
 		return L.circleMarker(latlng, options);
 		}
 
-		// For Heat Map
-		bosshmcoords = []; //define an array to store coordinates
-		onEachFeature: function BossJson2Heat(feature, layer) {
-		bosshmcoords.push([feature.geometry.coordinates[1],feature.geometry.coordinates[0]]);
-		}
-
 		// Load .geoJSON
 		var Boss 				= new L.GeoJSON.AJAX([BossURL],{pointToLayer:BossMarker,onEachFeature:oef});
-		var BossGetCoords 		= new L.GeoJSON.AJAX([BossURL],{onEachFeature:BossJson2Heat});
-		var BossHeat 			= L.heatLayer(bosshmcoords)
 
 	//----------------------------------------------------------------------------------------------------------------------
 	//------------------------------------------ Farm Route - Boss ---------------------------------------------------------
@@ -789,31 +1336,30 @@
 		"Domain"										: Domain,
 		"Cave"											: Cave,
 		"Chest"											: Chest,
-		"Chest - Heat Map"								: ChestHeat,
 		"Artifact Fodder"								: ArtifactFodder,
-		"Artifact Fodder - Heat Map"					: ArtifactFodderHeat,
 		"Electro Crystal"								: ElectroCrystal,
-		"Electro Crystal - Heat Map"					: ElectroCrystalHeat,
 		"Noctilucous Jade"								: NoctilucousJade,
-		"Noctilucous Jade - Heat Map"					: NoctilucousJadeHeat,
 		"Cor Lapis"										: CorLapis,
-		"Cor Lapis - Heat Map"							: CorLapisHeat,
 		"Crystal Chunk"									: CrystalChunk,
-		"Crystal Chunk - Heat Map"						: CrystalChunkHeat,
+		"Magical Crystal Chunk"							: MagicalCrystalChunk,
 		"White Iron Chunk"								: WhiteIronChunk,
-		"White Iron Chunk - Heat Map"					: WhiteIronChunkHeat,
+		"Wolfhook"										: Wolfhook,
+		"Small Lamp Grass"								: SmallLampGrass,
+		"Starconch"										: Starconch,
+		"Bamboo Shoot"									: BambooShoot,
+		"Mushroom"										: Mushroom,
+		"Sweet Flower"									: SweetFlower,
+		"Dandelion Seed"								: DandelionSeed,
+		"Mint"											: Mint,
+		"Berry"											: Berry,
+		"Bird Egg"										: BirdEgg,
 		"Jueyun Chili"									: JueyunChili,
-		"Jueyun Chili - Heat Map"						: JueyunChiliHeat,
 		"Lotus Head"									: LotusHead,
-		"Lotus Head - Heat Map"							: LotusHeadHeat,
 		"Raw Meat"										: RawMeat,
-		"Raw Meat - Heat Map"							: RawMeatHeat,
+		"Fowl"											: Fowl,
 		"Fish"											: Fish,
-		"Fish - Heat Map"								: FishHeat,
 		"Crab"											: Crab,
-		"Crab - Heat Map"								: CrabHeat,
 		"Boss"											: Boss,
-		"Boss - Heat Map"								: BossHeat,
 		"Farm Route - Boss"								: FarmRouteBossGroup,
 		"Farm Route - Mineral"							: FarmRouteMineralGroup,
 		}
