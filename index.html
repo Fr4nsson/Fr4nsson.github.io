@@ -23,12 +23,6 @@
 	width: 256.5px !important;
 	height: 256.5px !important;
 	}
- 
- 	/* Quick Fix Images
-	.leaflet-popup-content {
-    min-width: 384px;
-	}
-	*/
 
 	</style>
     <script type="text/javascript">
@@ -424,7 +418,7 @@
 		function ChestMarker(feature, latlng){
 		let options = {
 		opacity: 1,					// Marker Opacity
-		pane: 'CustomPane'			// To Adjust Z-Index
+		pane: 'CustomPane',			// To Adjust Z-Index
 		}
 		return L.marker(latlng, {icon: ChestIcon});
 		}
