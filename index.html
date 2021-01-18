@@ -9,6 +9,7 @@
     <script src="scripts/Leaflet.LocationShare.js"></script>
     <script src="scripts/leaflet.ajax.min.js"></script>
     <script src="scripts/leaflet-heat.js"></script>
+    <script src="scripts/L.Path.DashFlow.js"></script>
   </head>
   
   <body style="height: 100%;margin: 0;">
@@ -22,6 +23,12 @@
 	width: 256.5px !important;
 	height: 256.5px !important;
 	}
+ 
+ 	/* Quick Fix Images
+	.leaflet-popup-content {
+    min-width: 384px;
+	}
+	*/
 
 	</style>
     <script type="text/javascript">
@@ -40,7 +47,7 @@
 	    continuousWorld: false,
 	    noWrap: true,
 	    minZoom: 3,
-	    maxZoom: 5,
+	    maxZoom: 6,
 	    zoomControl: false,
 		minNativeZoom: 3,
 		maxNativeZoom: 5,
@@ -75,6 +82,85 @@
 				});
 			}
 		}
+
+		// OnEachFeature2 function
+		function oef2(feature, layer) {
+			if (feature.properties && feature.properties.name) {
+				layer.bindTooltip(feature.properties.name, {
+					opacity: 1.00,
+					direction: 'top',
+					offset: [0, -7]
+				});
+			}
+			if (feature.properties && feature.properties.name && feature.properties.description) {
+				layer.bindPopup("<center><b> " + feature.properties.name + "</center></b><br>" + feature.properties.description);
+			}
+			if (feature.properties && feature.properties.name.endsWith("Mitachurl") ){
+				layer.setIcon(MitachurlIcon);
+				};
+			if (feature.properties && feature.properties.name.endsWith("Ruin Guard") ){
+				layer.setIcon(RuinGuardIcon);
+				};
+			if (feature.properties && feature.properties.name.endsWith("Ruin Grader") ){
+				layer.setIcon(RuinGraderIcon);
+				};
+			if (feature.properties && feature.properties.name.endsWith("Ruin Hunter") ){
+				layer.setIcon(RuinHunterIcon);
+				};
+			if (feature.properties && feature.properties.name.endsWith("Hydro Abyss Mage") ){
+				layer.setIcon(HydroAbyssMageIcon);
+				};
+			if (feature.properties && feature.properties.name.endsWith("Cryo Abyss Mage") ){
+				layer.setIcon(CryoAbyssMageIcon);
+				};
+			if (feature.properties && feature.properties.name.endsWith("Pyro Abyss Mage") ){
+				layer.setIcon(PyroAbyssMageIcon);
+				};
+			if (feature.properties && feature.properties.name.endsWith("Fatui Pyro Agent") ){
+				layer.setIcon(FatuiPyroAgentIcon);
+				};
+			if (feature.properties && feature.properties.name.endsWith("Fatui Electro Cicin Mage") ){
+				layer.setIcon(FatuiElectroCicinMageIcon);
+				};
+			if (feature.properties && feature.properties.name.endsWith("Fatui Cryo Cicin Mage") ){
+				layer.setIcon(FatuiCryoCicinMageIcon);
+				};
+			if (feature.properties && feature.properties.name.endsWith("Geovishap Hatchling") ){
+				layer.setIcon(GeovishapHatchlingIcon);
+				};
+			if (feature.properties && feature.properties.name.endsWith("Stonehide Lawachurl") ){
+				layer.setIcon(StonehideLawachurlIcon);
+				};
+			if (feature.properties && feature.properties.name.endsWith("Frostarm Lawachurl") ){
+				layer.setIcon(FrostarmLawachurlIcon);
+				};
+			}
+
+		// OnEachFeatureChest function
+		function oefChest(feature, layer) {
+			if (feature.properties && feature.properties.name) {
+				layer.bindTooltip(feature.properties.name, {
+					opacity: 1.00,
+					direction: 'top',
+					offset: [0, -7],
+				});
+			}
+			if (feature.properties && feature.properties.name && feature.properties.description) {
+				layer.bindPopup("<center><b> " + feature.properties.name + "</center></b><br>" + feature.properties.description);
+			}
+			if (feature.properties && feature.properties.name.endsWith("Common Chest") ){
+				layer.setIcon(ChestCommonIcon);
+				};
+			if (feature.properties && feature.properties.name.endsWith("Exquisite Chest") ){
+				layer.setIcon(ChestExquisiteIcon);
+				};
+			if (feature.properties && feature.properties.name.endsWith("Precious Chest") ){
+				layer.setIcon(ChestPreciousIcon);
+				};
+			if (feature.properties && feature.properties.name.endsWith("Luxurious Chest") ){
+				layer.setIcon(ChestLuxuriousIcon);
+				};
+			}
 
 	//----------------------------------------------------------------------------------------------------------------------
 	//--------------------------------------------- Info Button ------------------------------------------------------------
@@ -196,8 +282,8 @@
 		// Stuff for CustomMarkerIcon
 		var DomainIcon = L.icon({
 		iconUrl: 'markers/DomainMarker.png',
-		iconSize:      [20, 20],	// size of the icon
-		iconAnchor:    [10, 10],	// point of the icon which will correspond to marker's location (X & Y=split in half)
+		iconSize:      [23, 23],	// size of the icon
+		iconAnchor:    [11.5, 11.5],	// point of the icon which will correspond to marker's location (X & Y=split in half)
 		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
 		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
 		});
@@ -284,13 +370,54 @@
 		}
 		*/
 
+		var ChestIconSize 			= [30, 30] //[24, 24]
+		var ChestIconAnchor 		= [15, 15] //[12, 12]
+		var ChestIconPopupAnchor 	= [0, -12]
+		var ChestIconTooltipAnchor 	= [0, -5]
+
 		// Stuff for CustomMarkerIcon
 		var ChestIcon = L.icon({
-		iconUrl: 'markers/ChestMarker.png',
-		iconSize:      [24, 24],	// size of the icon
-		iconAnchor:    [12, 12],		// point of the icon which will correspond to marker's location (X & Y=split in half)
-		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
-		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		iconUrl: 		'markers/chest/ChestMarker.png',
+		iconSize:     	 ChestIconSize,				// size of the icon
+		iconAnchor:   	 ChestIconAnchor,			// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:  	 ChestIconPopupAnchor,		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor:   ChestIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		// Stuff for CustomMarkerIcon
+		var ChestCommonIcon = L.icon({
+		iconUrl: 		'markers/chest/ChestCommon.png',
+		iconSize:     	 ChestIconSize,				// size of the icon
+		iconAnchor:   	 ChestIconAnchor,			// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:  	 ChestIconPopupAnchor,		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor:   ChestIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		// Stuff for CustomMarkerIcon
+		var ChestExquisiteIcon = L.icon({
+		iconUrl: 		'markers/chest/ChestExquisite.png',
+		iconSize:     	 ChestIconSize,				// size of the icon
+		iconAnchor:   	 ChestIconAnchor,			// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:  	 ChestIconPopupAnchor,		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor:   ChestIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		// Stuff for CustomMarkerIcon
+		var ChestPreciousIcon = L.icon({
+		iconUrl: 		'markers/chest/ChestPrecious.png',
+		iconSize:     	 ChestIconSize,				// size of the icon
+		iconAnchor:   	 ChestIconAnchor,			// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:  	 ChestIconPopupAnchor,		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor:   ChestIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		// Stuff for CustomMarkerIcon
+		var ChestLuxuriousIcon = L.icon({
+		iconUrl: 		'markers/chest/ChestLuxurious.png',
+		iconSize:     	 ChestIconSize,				// size of the icon
+		iconAnchor:   	 ChestIconAnchor,			// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:  	 ChestIconPopupAnchor,		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor:   ChestIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
 		});
 
 		// Stuff for CustomMarker
@@ -312,7 +439,7 @@
 		*/
 
 		// Load .geoJSON
-		var Chest 				= new L.GeoJSON.AJAX([ChestURL],{pointToLayer:ChestMarker,onEachFeature:oef});
+		var Chest 				= new L.GeoJSON.AJAX([ChestURL],{pointToLayer:ChestMarker,onEachFeature:oefChest});
 		//var ChestFarmRoute 	= new L.GeoJSON.AJAX([ChestFarmRouteURL],{style:ChestLines,onEachFeature:oef});
 
 	//----------------------------------------------------------------------------------------------------------------------
@@ -1230,18 +1357,19 @@
 		var Crab 					= new L.GeoJSON.AJAX([CrabURL],{pointToLayer:CrabMarker,onEachFeature:oef});
 
 	//----------------------------------------------------------------------------------------------------------------------
-	//------------------------------------------------- Boss ---------------------------------------------------------------
+	//-------------------------------------------- Elite Enemies -----------------------------------------------------------
 	//----------------------------------------------------------------------------------------------------------------------
 	//-Expand/Minimize
 
 		// geoJSON URL'S
-		var BossURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/Boss.geojson"
+		var EliteEnemiesURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/EliteEnemies.geojson"
 
+		/*
 		// Stuff for CircleMarker
-		function BossMarker(feature, latlng){
+		function EliteEnemiesMarker(feature, latlng){
 		let options = {
 		radius: 5,
-		fillColor: "firebrick",	// BossColor
+		fillColor: "firebrick",	// EliteEnemiesColor
 		color: "white",			// Stroke Color
 		weight: 1,				// Stroke Weight
 		opacity: 0.95,			// Stroke Opacity
@@ -1250,35 +1378,164 @@
 		}
 		return L.circleMarker(latlng, options);
 		}
+		*/
+
+		var EliteEnemiesIconSize 			= [27, 27]
+		var EliteEnemiesIconAnchor 			= [13.5, 13.5]
+		var EliteEnemiesIconPopupAnchor 	= [0, -12]
+		var EliteEnemiesIconTooltipAnchor 	= [0, -5]
+
+		// Stuff for CustomMarkerIcon
+		var EliteEnemiesIcon = L.icon({
+		iconUrl: 		'markers/enemies/EliteEnemiesMarker.png',
+		iconSize:     	 EliteEnemiesIconSize,			// size of the icon
+		iconAnchor:   	 EliteEnemiesIconAnchor,		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:  	 EliteEnemiesIconPopupAnchor,	// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor:   EliteEnemiesIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		var MitachurlIcon = L.icon({
+    	iconUrl: 		'markers/enemies/Mitachurl.png',
+		iconSize:     	 EliteEnemiesIconSize,			// size of the icon
+		iconAnchor:   	 EliteEnemiesIconAnchor,		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:  	 EliteEnemiesIconPopupAnchor,	// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor:   EliteEnemiesIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		var RuinGuardIcon = L.icon({
+    	iconUrl: 		'markers/enemies/RuinGuard.png',
+		iconSize:     	 EliteEnemiesIconSize,			// size of the icon
+		iconAnchor:   	 EliteEnemiesIconAnchor,		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:  	 EliteEnemiesIconPopupAnchor,	// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor:   EliteEnemiesIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		var RuinGraderIcon = L.icon({
+    	iconUrl: 		'markers/enemies/RuinGrader.png',
+		iconSize:     	 EliteEnemiesIconSize,			// size of the icon
+		iconAnchor:   	 EliteEnemiesIconAnchor,		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:  	 EliteEnemiesIconPopupAnchor,	// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor:   EliteEnemiesIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		var RuinHunterIcon = L.icon({
+    	iconUrl: 		'markers/enemies/RuinHunter.png',
+		iconSize:     	 EliteEnemiesIconSize,			// size of the icon
+		iconAnchor:   	 EliteEnemiesIconAnchor,		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:  	 EliteEnemiesIconPopupAnchor,	// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor:   EliteEnemiesIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		var HydroAbyssMageIcon = L.icon({
+    	iconUrl: 		'markers/enemies/HydroAbyssMage.png',
+		iconSize:     	 EliteEnemiesIconSize,			// size of the icon
+		iconAnchor:   	 EliteEnemiesIconAnchor,		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:  	 EliteEnemiesIconPopupAnchor,	// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor:   EliteEnemiesIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		var CryoAbyssMageIcon = L.icon({
+    	iconUrl: 		'markers/enemies/CryoAbyssMage.png',
+		iconSize:     	 EliteEnemiesIconSize,			// size of the icon
+		iconAnchor:   	 EliteEnemiesIconAnchor,		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:  	 EliteEnemiesIconPopupAnchor,	// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor:   EliteEnemiesIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		var PyroAbyssMageIcon = L.icon({
+    	iconUrl: 		'markers/enemies/PyroAbyssMage.png',
+		iconSize:     	 EliteEnemiesIconSize,			// size of the icon
+		iconAnchor:   	 EliteEnemiesIconAnchor,		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:  	 EliteEnemiesIconPopupAnchor,	// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor:   EliteEnemiesIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		var FatuiPyroAgentIcon = L.icon({
+    	iconUrl: 		'markers/enemies/FatuiPyroAgent.png',
+		iconSize:     	 EliteEnemiesIconSize,			// size of the icon
+		iconAnchor:   	 EliteEnemiesIconAnchor,		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:  	 EliteEnemiesIconPopupAnchor,	// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor:   EliteEnemiesIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		var FatuiElectroCicinMageIcon = L.icon({
+    	iconUrl: 		'markers/enemies/FatuiElectroCicinMage.png',
+		iconSize:     	 EliteEnemiesIconSize,			// size of the icon
+		iconAnchor:   	 EliteEnemiesIconAnchor,		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:  	 EliteEnemiesIconPopupAnchor,	// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor:   EliteEnemiesIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		var FatuiCryoCicinMageIcon = L.icon({
+    	iconUrl: 		'markers/enemies/FatuiCryoCicinMage.png',
+		iconSize:     	 EliteEnemiesIconSize,			// size of the icon
+		iconAnchor:   	 EliteEnemiesIconAnchor,		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:  	 EliteEnemiesIconPopupAnchor,	// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor:   EliteEnemiesIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		var GeovishapHatchlingIcon = L.icon({
+    	iconUrl: 		'markers/enemies/GeovishapHatchling.png',
+		iconSize:     	 EliteEnemiesIconSize,			// size of the icon
+		iconAnchor:   	 EliteEnemiesIconAnchor,		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:  	 EliteEnemiesIconPopupAnchor,	// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor:   EliteEnemiesIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		var StonehideLawachurlIcon = L.icon({
+    	iconUrl: 		'markers/enemies/StonehideLawachurl.png',
+		iconSize:     	 EliteEnemiesIconSize,			// size of the icon
+		iconAnchor:   	 EliteEnemiesIconAnchor,		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:  	 EliteEnemiesIconPopupAnchor,	// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor:   EliteEnemiesIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		var FrostarmLawachurlIcon = L.icon({
+    	iconUrl: 		'markers/enemies/FrostarmLawachurl.png',
+		iconSize:     	 EliteEnemiesIconSize,			// size of the icon
+		iconAnchor:   	 EliteEnemiesIconAnchor,		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:  	 EliteEnemiesIconPopupAnchor,	// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor:   EliteEnemiesIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		});
+
+		// Stuff for CustomMarker
+		function EliteEnemiesMarker(feature, latlng){
+		let options = {
+		opacity: 1,					// Marker Opacity
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.marker(latlng, {icon: EliteEnemiesIcon});
+		}
 
 		// Load .geoJSON
-		var Boss 				= new L.GeoJSON.AJAX([BossURL],{pointToLayer:BossMarker,onEachFeature:oef});
+		var EliteEnemies 				= new L.GeoJSON.AJAX([EliteEnemiesURL],{pointToLayer:EliteEnemiesMarker,onEachFeature:oef2});
 
 	//----------------------------------------------------------------------------------------------------------------------
-	//------------------------------------------ Farm Route - Boss ---------------------------------------------------------
+	//-------------------------------------- Farm Route - Elite Enemies ----------------------------------------------------
 	//----------------------------------------------------------------------------------------------------------------------
 	//-Expand/Minimize
 
 		// geoJSON URL'S
-		var FarmRouteBossURL	= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/FarmRouteBoss.geojson"
+		var FarmRouteEliteEnemiesURL	= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/FarmRouteEliteEnemies.geojson"
 
 		// Stuff for lines
-		var BossLines = {
+		var EliteEnemiesLines = {
     	"color": "firebrick",
-    	"weight": 5,
-    	//"dashArray": 6,
+    	"weight": 4,
+    	"dashArray": 8,
+    	"dashSpeed": -30,
     	"opacity": 0.95
 		};
 
 		// Load .geoJSON
-		var FarmRouteBoss 		= new L.GeoJSON.AJAX([FarmRouteBossURL],{style:BossLines,onEachFeature:oef});
+		var FarmRouteEliteEnemies 		= new L.GeoJSON.AJAX([FarmRouteEliteEnemiesURL],{style:EliteEnemiesLines,onEachFeature:oef});
 
-		// FarmRouteBossGroup
-    	var FarmRouteBossGroup = L.layerGroup([
+		// FarmRouteEliteEnemiesGroup
+    	var FarmRouteEliteEnemiesGroup = L.layerGroup([
     	Teleport,
     	Statue,
-    	Boss,
-    	FarmRouteBoss,
+    	EliteEnemies,
+    	FarmRouteEliteEnemies,
     	])
 
 	//----------------------------------------------------------------------------------------------------------------------
@@ -1292,8 +1549,9 @@
 		// Stuff for lines
 		var FarmRouteMineralLines = {
     	"color": "firebrick",
-    	"weight": 5,
-    	//"dashArray": 6,
+    	"weight": 4,
+    	"dashArray": 8,
+    	"dashSpeed": -30,
     	"opacity": 0.95
 		};
 
@@ -1325,6 +1583,7 @@
     	Statue,
     	Domain,
     	Cave,
+    	FarmRouteEliteEnemiesGroup,
     	])
 
     	DefaultShow.addTo(map)
@@ -1359,8 +1618,8 @@
 		"Fowl"											: Fowl,
 		"Fish"											: Fish,
 		"Crab"											: Crab,
-		"Boss"											: Boss,
-		"Farm Route - Boss"								: FarmRouteBossGroup,
+		"Elite Enemies"									: EliteEnemies,
+		"Farm Route - Elite Enemies"					: FarmRouteEliteEnemiesGroup,
 		"Farm Route - Mineral"							: FarmRouteMineralGroup,
 		}
 
