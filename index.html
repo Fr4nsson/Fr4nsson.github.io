@@ -1567,16 +1567,41 @@
     	])
 
 	//----------------------------------------------------------------------------------------------------------------------
+	//----------------------------------------- Farm Route - Artifact ------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// geoJSON URL'S
+		var FarmRouteArtifactURL	= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/FarmRouteArtifact.geojson"
+
+		// Stuff for lines
+		var FarmRouteArtifactLines = {
+    	"color": "firebrick",
+    	"weight": 4,
+    	"dashArray": 8,
+    	"dashSpeed": -30,
+    	"opacity": 0.95
+		};
+
+		// Load .geoJSON
+		var FarmRouteArtifact 		= new L.GeoJSON.AJAX([FarmRouteArtifactURL],{style:FarmRouteArtifactLines,onEachFeature:oef});
+
+		// FarmRouteArtifactGroup
+    	var FarmRouteArtifactGroup = L.layerGroup([
+    	Teleport,
+    	Statue,
+    	Cave,
+    	ArtifactFodder,
+    	FarmRouteArtifact,
+    	])
+
+	//----------------------------------------------------------------------------------------------------------------------
 	//----------------------------------------------- Overlays -------------------------------------------------------------
 	//----------------------------------------------------------------------------------------------------------------------
 	//-Expand/Minimize
 
 		// Add to map on load
     	var DefaultShow = L.layerGroup([
-    	Teleport,
-    	Statue,
-    	Domain,
-    	Cave,
     	FarmRouteEliteEnemiesGroup,
     	])
 
@@ -1615,6 +1640,7 @@
 		"Elite Enemies"									: EliteEnemies,
 		"Farm Route - Elite Enemies"					: FarmRouteEliteEnemiesGroup,
 		"Farm Route - Mineral"							: FarmRouteMineralGroup,
+		"Farm Route - Artifact"							: FarmRouteArtifactGroup,
 		}
 
 		var layerControl = L.control.layers(null, mapOverlays, {position:'topleft'}).addTo(map);
