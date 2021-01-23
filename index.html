@@ -4,12 +4,14 @@
     <title>Fr4nsson's Genshin Impact Map</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="scripts/leaflet.css">
+    <link rel="stylesheet" href="scripts/MarkerCluster.css">
     <link rel="stylesheet" href="scripts/all.min.css"> <!-- Font Awesome Free 5.15.1 -->
     <script src="scripts/leaflet.js"></script>
     <script src="scripts/Leaflet.LocationShare.js"></script>
     <script src="scripts/leaflet.ajax.min.js"></script>
     <script src="scripts/leaflet-heat.js"></script>
     <script src="scripts/L.Path.DashFlow.js"></script>
+    <script src="scripts/leaflet.markercluster.js"></script>
   </head>
   
   <body style="height: 100%;margin: 0;">
@@ -168,22 +170,7 @@
 
 		// geoJSON URL'S
 		var TeleportURL 		= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/Teleport.geojson"
-		/*
-		// Stuff for CircleMarker
-		function TeleportMarker(feature, latlng){
-		let options = {
-		radius: 5,
-		fillColor: "dodgerblue",	// TeleportColor
-		color: "white",				// Stroke Color
-		weight: 1,					// Stroke Weight
-		opacity: 0.95,				// Stroke Opacity
-		fillOpacity: 0.95,
-		pane: 'CustomPane'			// To Adjust Z-Index
-		}
-		return L.circleMarker(latlng, options);
-		}
-		*/
-		
+
 		// Stuff for CustomMarkerIcon
 		var TeleportIcon = L.icon({
 		iconUrl: 'markers/TeleportMarker.png',
@@ -212,22 +199,7 @@
 
 		// geoJSON URL'S
 		var StatueURL 					= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/Statue.geojson"
-		/*
-		// Stuff for CircleMarker
-		function StatueMarker(feature, latlng){
-		let options = {
-		radius: 5,
-		fillColor: "blueviolet", 	// StatueColor
-		color: "white",				// Stroke Color
-		weight: 1,					// Stroke Weight
-		opacity: 0.95,				// Stroke Opacity
-		fillOpacity: 0.95,
-		pane: 'CustomPane'			// To Adjust Z-Index
-		}
-		return L.circleMarker(latlng, options);
-		}
-		*/
-		
+
 		// Stuff for CustomMarkerIcon
 		var StatueIcon = L.icon({
 		iconUrl: 'markers/StatueMarker.png',
@@ -246,7 +218,6 @@
 		return L.marker(latlng, {icon: StatueIcon});
 		}
 		
-
 		// Load .geoJSON
 		var Statue						= new L.GeoJSON.AJAX([StatueURL],{pointToLayer:StatueMarker,onEachFeature:oef}); //.addTo(map)
 
@@ -257,22 +228,7 @@
 
 		// geoJSON URL'S
 		var DomainURL 					= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/Domain.geojson"
-		/*
-		// Stuff for CircleMarker
-		function DomainMarker(feature, latlng){
-		let options = {
-		radius: 5,
-		fillColor: "dimgray", 	// DomainColor
-		color: "white",			// Stroke Color
-		weight: 1,				// Stroke Weight
-		opacity: 0.95,			// Stroke Opacity
-		fillOpacity: 0.95,
-		pane: 'CustomPane'		// To Adjust Z-Index
-		}
-		return L.circleMarker(latlng, options);
-		}
-		*/
-		
+
 		// Stuff for CustomMarkerIcon
 		var DomainIcon = L.icon({
 		iconUrl: 'markers/DomainMarker.png',
@@ -291,7 +247,6 @@
 		return L.marker(latlng, {icon: DomainIcon});
 		}
 		
-
 		// Load .geoJSON
 		var Domain						= new L.GeoJSON.AJAX([DomainURL],{pointToLayer:DomainMarker,onEachFeature:oef});
 
@@ -303,21 +258,6 @@
 		// geoJSON URL'S
 		var CaveURL 		= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/Cave.geojson"
 
-		/*
-		// Stuff for CircleMarker
-		function CaveMarker(feature, latlng){
-		let options = {
-		radius: 5,
-		fillColor: "lightgrey", // CaveColor
-		color: "white",			// Stroke Color
-		weight: 1,				// Stroke Weight
-		opacity: 0.95,			// Stroke Opacity
-		fillOpacity: 0.95,
-		pane: 'CustomPane'		// To Adjust Z-Index
-		}
-		return L.circleMarker(latlng, options);
-		}
-		*/
 		// Stuff for CustomMarkerIcon
 		var CaveIcon = L.icon({
 		iconUrl: 'markers/CaveMarker.png',
@@ -338,6 +278,37 @@
 
 		// Load .geoJSON
 		var Cave			= new L.GeoJSON.AJAX([CaveURL],{pointToLayer:CaveMarker,onEachFeature:oef}); //.addTo(map)
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//-------------------------------------------- Marker Settings ---------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+		
+		// All Other
+		var GlobalMarkerIconSize 			= [20, 20]
+		var GlobalMarkerIconAnchor 			= [10, 10]
+		var GlobalMarkerIconPopupAnchor 	= [0, -12]
+		var GlobalMarkerIconTooltipAnchor 	= [0, -5]
+
+		//var GlobalMarkerShadowIconUrl		= 'markers/MarkerShadow.png'
+		var GlobalMarkerShadowIconUrl		= ''
+		var GlobalMarkerShadowSize			= [20, 20]
+		var GlobalMarkerShadowAnchor		= [10, 8]
+
+
+
+
+
+		// Elite
+		var EliteEnemiesIconSize 			= [30, 30]
+		var EliteEnemiesIconAnchor 			= [15, 15]
+		var EliteEnemiesIconPopupAnchor 	= [0, -12]
+		var EliteEnemiesIconTooltipAnchor 	= [0, -5]
+
+		//var EliteEnemiesShadowIconUrl		= 'markers/enemies/EliteEnemiesShadowMarker.png'
+		var EliteEnemiesShadowIconUrl		= ''
+		var EliteEnemiesShadowSize			= [30, 30]
+		var EliteEnemiesShadowAnchor		= [15, 11]
 
 	//----------------------------------------------------------------------------------------------------------------------
 	//------------------------------------------------ Chest ---------------------------------------------------------------
@@ -444,37 +415,33 @@
 		// geoJSON URL'S
 		var ArtifactFodderURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/ArtifactFodder.geojson"
 
-		/*
-		// Stuff for CircleMarker
-		function ArtifactFodderMarker(feature, latlng){
-		let options = {
-		radius: 5,
-		fillColor: "tan", 			// ArtifactFodderColor
-		color: "white",				// Stroke Color
-		weight: 1,					// Stroke Weight
-		opacity: 0.95,				// Stroke Opacity
-		fillOpacity: 0.95,
-		pane: 'CustomPane'			// To Adjust Z-Index
-		}
-		return L.circleMarker(latlng, options);
-		}
-		/*
-		// Stuff for lines
-		var ArtifactFodderLines = {
-    	"color": "#b22222",
-    	"weight": 5,
-    	"opacity": 0.95
-		};
-		*/
-
 		// Stuff for CustomMarkerIcon
 		var ArtifactFodderIcon = L.icon({
-		iconUrl: 'markers/ArtifactFodderMarker.png',
-		iconSize:      [18, 18],	// size of the icon
-		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
-		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
-		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		iconUrl:      'markers/ArtifactFodderMarker.png',
+		iconSize:      GlobalMarkerIconSize,			// size of the icon
+		iconAnchor:    GlobalMarkerIconAnchor,			// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   GlobalMarkerIconPopupAnchor,		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: GlobalMarkerIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     GlobalMarkerShadowIconUrl,
+		shadowSize:    GlobalMarkerShadowSize,
+		shadowAnchor:  GlobalMarkerShadowAnchor,
 		});
+
+		/*
+		// Stuff for CustomMarkerIcon
+		var ArtifactFodderIcon = L.icon({
+		iconUrl:        'markers/ArtifactFodderMarker4.png',
+		iconSize:     	 EliteEnemiesIconSize,			// size of the icon
+		iconAnchor:   	 EliteEnemiesIconAnchor,		// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:  	 EliteEnemiesIconPopupAnchor,	// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor:   EliteEnemiesIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+
+		shadowUrl:     	 EliteEnemiesShadowIconUrl,
+		shadowSize:      EliteEnemiesShadowSize,
+		shadowAnchor:    EliteEnemiesShadowAnchor,
+		});
+		*/
 
 		// Stuff for CustomMarker
 		function ArtifactFodderMarker(feature, latlng){
@@ -496,29 +463,17 @@
 		// geoJSON URL'S
 		var ElectroCrystalURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/ElectroCrystal.geojson"
 
-		/*
-		// Stuff for CircleMarker
-		function ElectroCrystalMarker(feature, latlng){
-		let options = {
-		radius: 5,
-		fillColor: "darkorchid",		// ElectroCrystalColor
-		color: "white",					// Stroke Color
-		weight: 1,						// Stroke Weight
-		opacity: 0.95,					// Stroke Opacity
-		fillOpacity: 0.95,
-		pane: 'CustomPane'				// To Adjust Z-Index
-		}
-		return L.circleMarker(latlng, options);
-		}
-		*/
-
 		// Stuff for CustomMarkerIcon
 		var ElectroCrystalIcon = L.icon({
 		iconUrl: 'markers/ElectroCrystalMarker.png',
-		iconSize:      [18, 18],	// size of the icon
-		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
-		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
-		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		iconSize:      GlobalMarkerIconSize,			// size of the icon
+		iconAnchor:    GlobalMarkerIconAnchor,			// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   GlobalMarkerIconPopupAnchor,		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: GlobalMarkerIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     GlobalMarkerShadowIconUrl,
+		shadowSize:    GlobalMarkerShadowSize,
+		shadowAnchor:  GlobalMarkerShadowAnchor,
 		});
 
 		// Stuff for CustomMarker
@@ -541,29 +496,17 @@
 		// geoJSON URL'S
 		var NoctilucousJadeURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/NoctilucousJade.geojson"
 
-		/*
-		// Stuff for CircleMarker
-		function NoctilucousJadeMarker(feature, latlng){
-		let options = {
-		radius: 5,
-		fillColor: "slateblue", // NoctilucousJadeColor
-		color: "white",			// Stroke Color
-		weight: 1,				// Stroke Weight
-		opacity: 0.95,			// Stroke Opacity
-		fillOpacity: 0.95,
-		pane: 'CustomPane'		// To Adjust Z-Index
-		}
-		return L.circleMarker(latlng, options);
-		}
-		*/
-
 		// Stuff for CustomMarkerIcon
 		var NoctilucousJadeIcon = L.icon({
 		iconUrl: 'markers/NoctilucousJadeMarker.png',
-		iconSize:      [18, 18],	// size of the icon
-		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
-		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
-		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		iconSize:      GlobalMarkerIconSize,			// size of the icon
+		iconAnchor:    GlobalMarkerIconAnchor,			// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   GlobalMarkerIconPopupAnchor,		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: GlobalMarkerIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     GlobalMarkerShadowIconUrl,
+		shadowSize:    GlobalMarkerShadowSize,
+		shadowAnchor:  GlobalMarkerShadowAnchor,
 		});
 
 		// Stuff for CustomMarker
@@ -586,29 +529,17 @@
 		// geoJSON URL'S
 		var CorLapisURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/CorLapis.geojson"
 
-		/*
-		// Stuff for CircleMarker
-		function CorLapisMarker(feature, latlng){
-		let options = {
-		radius: 5,
-		fillColor: "darkorange",	// CorLapisColor
-		color: "white",				// Stroke Color
-		weight: 1,					// Stroke Weight
-		opacity: 0.95,				// Stroke Opacity
-		fillOpacity: 0.95,
-		pane: 'CustomPane'			// To Adjust Z-Index
-		}
-		return L.circleMarker(latlng, options);
-		}
-		*/
-
 		// Stuff for CustomMarkerIcon
 		var CorLapisIcon = L.icon({
 		iconUrl: 'markers/CorLapisMarker.png',
-		iconSize:      [18, 18],	// size of the icon
-		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
-		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
-		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		iconSize:      GlobalMarkerIconSize,			// size of the icon
+		iconAnchor:    GlobalMarkerIconAnchor,			// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   GlobalMarkerIconPopupAnchor,		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: GlobalMarkerIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     GlobalMarkerShadowIconUrl,
+		shadowSize:    GlobalMarkerShadowSize,
+		shadowAnchor:  GlobalMarkerShadowAnchor,
 		});
 
 		// Stuff for CustomMarker
@@ -631,29 +562,17 @@
 		// geoJSON URL'S
 		var CrystalChunkURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/CrystalChunk.geojson"
 
-		/*
-		// Stuff for CircleMarker
-		function CrystalChunkMarker(feature, latlng){
-		let options = {
-		radius: 5,
-		fillColor: "aqua",			// CrystalChunkColor
-		color: "white",				// Stroke Color
-		weight: 1,					// Stroke Weight
-		opacity: 0.95,				// Stroke Opacity
-		fillOpacity: 0.95,
-		pane: 'CustomPane'			// To Adjust Z-Index
-		}
-		return L.circleMarker(latlng, options);
-		}
-		*/
-
 		// Stuff for CustomMarkerIcon
 		var CrystalChunkIcon = L.icon({
-		iconUrl: 'markers/CrystalChunkMarker.png',
-		iconSize:      [18, 18],	// size of the icon
-		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
-		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
-		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		iconUrl:      'markers/CrystalChunkMarker.png',
+		iconSize:      GlobalMarkerIconSize,			// size of the icon
+		iconAnchor:    GlobalMarkerIconAnchor,			// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   GlobalMarkerIconPopupAnchor,		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: GlobalMarkerIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+
+		shadowUrl:     GlobalMarkerShadowIconUrl,
+		shadowSize:    GlobalMarkerShadowSize,
+		shadowAnchor:  GlobalMarkerShadowAnchor,
 		});
 
 		// Stuff for CustomMarker
@@ -676,29 +595,17 @@
 		// geoJSON URL'S
 		var MagicalCrystalChunkURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/MagicalCrystalChunk.geojson"
 
-		/*
-		// Stuff for CircleMarker
-		function MagicalCrystalChunkMarker(feature, latlng){
-		let options = {
-		radius: 5,
-		fillColor: "aqua",			// MagicalCrystalChunkColor
-		color: "white",				// Stroke Color
-		weight: 1,					// Stroke Weight
-		opacity: 0.95,				// Stroke Opacity
-		fillOpacity: 0.95,
-		pane: 'CustomPane'			// To Adjust Z-Index
-		}
-		return L.circleMarker(latlng, options);
-		}
-		*/
-
 		// Stuff for CustomMarkerIcon
 		var MagicalCrystalChunkIcon = L.icon({
 		iconUrl: 'markers/MagicalCrystalChunkMarker.png',
-		iconSize:      [18, 18],	// size of the icon
-		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
-		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
-		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		iconSize:      GlobalMarkerIconSize,			// size of the icon
+		iconAnchor:    GlobalMarkerIconAnchor,			// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   GlobalMarkerIconPopupAnchor,		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: GlobalMarkerIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+
+		shadowUrl:     GlobalMarkerShadowIconUrl,
+		shadowSize:    GlobalMarkerShadowSize,
+		shadowAnchor:  GlobalMarkerShadowAnchor,
 		});
 
 		// Stuff for CustomMarker
@@ -721,29 +628,17 @@
 		// geoJSON URL'S
 		var WhiteIronChunkURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/WhiteIronChunk.geojson"
 
-		/*
-		// Stuff for CircleMarker
-		function WhiteIronChunkMarker(feature, latlng){
-		let options = {
-		radius: 5,
-		fillColor: "darkgray",		// WhiteIronChunkColor
-		color: "white",				// Stroke Color
-		weight: 1,					// Stroke Weight
-		opacity: 0.95,				// Stroke Opacity
-		fillOpacity: 0.95,
-		pane: 'CustomPane'			// To Adjust Z-Index
-		}
-		return L.circleMarker(latlng, options);
-		}
-		*/
-
 		// Stuff for CustomMarkerIcon
 		var WhiteIronChunkIcon = L.icon({
 		iconUrl: 'markers/WhiteIronChunkMarker.png',
-		iconSize:      [18, 18],	// size of the icon
-		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
-		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
-		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		iconSize:      GlobalMarkerIconSize,			// size of the icon
+		iconAnchor:    GlobalMarkerIconAnchor,			// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   GlobalMarkerIconPopupAnchor,		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: GlobalMarkerIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+
+		shadowUrl:     GlobalMarkerShadowIconUrl,
+		shadowSize:    GlobalMarkerShadowSize,
+		shadowAnchor:  GlobalMarkerShadowAnchor,
 		});
 
 		// Stuff for CustomMarker
@@ -766,29 +661,17 @@
 		// geoJSON URL'S
 		var WolfhookURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/Wolfhook.geojson"
 
-		/*
-		// Stuff for CircleMarker
-		function WolfhookMarker(feature, latlng){
-		let options = {
-		radius: 5,
-		fillColor: "salmon",	// Wolfhook Color
-		color: "white",			// Stroke Color
-		weight: 1,				// Stroke Weight
-		opacity: 0.95,			// Stroke Opacity
-		fillOpacity: 0.95,
-		pane: 'CustomPane'		// To Adjust Z-Index
-		}
-		return L.circleMarker(latlng, options);
-		}
-		*/
-
 		// Stuff for CustomMarkerIcon
 		var WolfhookIcon = L.icon({
 		iconUrl: 'markers/WolfhookMarker.png',
-		iconSize:      [18, 18],	// size of the icon
-		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
-		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
-		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		iconSize:      GlobalMarkerIconSize,			// size of the icon
+		iconAnchor:    GlobalMarkerIconAnchor,			// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   GlobalMarkerIconPopupAnchor,		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: GlobalMarkerIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     GlobalMarkerShadowIconUrl,
+		shadowSize:    GlobalMarkerShadowSize,
+		shadowAnchor:  GlobalMarkerShadowAnchor,
 		});
 
 		// Stuff for CustomMarker
@@ -804,6 +687,72 @@
 		var Wolfhook 			= new L.GeoJSON.AJAX([WolfhookURL],{pointToLayer:WolfhookMarker,onEachFeature:oef});
 
 	//----------------------------------------------------------------------------------------------------------------------
+	//----------------------------------------------- Valberry -------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// geoJSON URL'S
+		var ValberryURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/Valberry.geojson"
+
+		// Stuff for CustomMarkerIcon
+		var ValberryIcon = L.icon({
+		iconUrl: 'markers/ValberryMarker.png',
+		iconSize:      GlobalMarkerIconSize,			// size of the icon
+		iconAnchor:    GlobalMarkerIconAnchor,			// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   GlobalMarkerIconPopupAnchor,		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: GlobalMarkerIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     GlobalMarkerShadowIconUrl,
+		shadowSize:    GlobalMarkerShadowSize,
+		shadowAnchor:  GlobalMarkerShadowAnchor,
+		});
+
+		// Stuff for CustomMarker
+		function ValberryMarker(feature, latlng){
+		let options = {
+		opacity: 1,					// Marker Opacity
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.marker(latlng, {icon: ValberryIcon});
+		}
+
+		// Load .geoJSON
+		var Valberry 			= new L.GeoJSON.AJAX([ValberryURL],{pointToLayer:ValberryMarker,onEachFeature:oef});
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//----------------------------------------------- Cecilia -------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// geoJSON URL'S
+		var CeciliaURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/Cecilia.geojson"
+
+		// Stuff for CustomMarkerIcon
+		var CeciliaIcon = L.icon({
+		iconUrl: 'markers/CeciliaMarker.png',
+		iconSize:      GlobalMarkerIconSize,			// size of the icon
+		iconAnchor:    GlobalMarkerIconAnchor,			// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   GlobalMarkerIconPopupAnchor,		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: GlobalMarkerIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     GlobalMarkerShadowIconUrl,
+		shadowSize:    GlobalMarkerShadowSize,
+		shadowAnchor:  GlobalMarkerShadowAnchor,
+		});
+
+		// Stuff for CustomMarker
+		function CeciliaMarker(feature, latlng){
+		let options = {
+		opacity: 1,					// Marker Opacity
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.marker(latlng, {icon: CeciliaIcon});
+		}
+
+		// Load .geoJSON
+		var Cecilia 			= new L.GeoJSON.AJAX([CeciliaURL],{pointToLayer:CeciliaMarker,onEachFeature:oef});
+
+	//----------------------------------------------------------------------------------------------------------------------
 	//------------------------------------------- Small Lamp Grass ---------------------------------------------------------
 	//----------------------------------------------------------------------------------------------------------------------
 	//-Expand/Minimize
@@ -811,29 +760,17 @@
 		// geoJSON URL'S
 		var SmallLampGrassURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/SmallLampGrass.geojson"
 
-		/*
-		// Stuff for CircleMarker
-		function SmallLampGrassMarker(feature, latlng){
-		let options = {
-		radius: 5,
-		fillColor: "salmon",	// SmallLampGrass Color
-		color: "white",			// Stroke Color
-		weight: 1,				// Stroke Weight
-		opacity: 0.95,			// Stroke Opacity
-		fillOpacity: 0.95,
-		pane: 'CustomPane'		// To Adjust Z-Index
-		}
-		return L.circleMarker(latlng, options);
-		}
-		*/
-
 		// Stuff for CustomMarkerIcon
 		var SmallLampGrassIcon = L.icon({
 		iconUrl: 'markers/SmallLampGrassMarker.png',
-		iconSize:      [18, 18],	// size of the icon
-		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
-		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
-		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		iconSize:      GlobalMarkerIconSize,			// size of the icon
+		iconAnchor:    GlobalMarkerIconAnchor,			// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   GlobalMarkerIconPopupAnchor,		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: GlobalMarkerIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     GlobalMarkerShadowIconUrl,
+		shadowSize:    GlobalMarkerShadowSize,
+		shadowAnchor:  GlobalMarkerShadowAnchor,
 		});
 
 		// Stuff for CustomMarker
@@ -859,10 +796,14 @@
 		// Stuff for CustomMarkerIcon
 		var StarconchIcon = L.icon({
 		iconUrl: 'markers/StarconchMarker.png',
-		iconSize:      [18, 18],	// size of the icon
-		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
-		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
-		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		iconSize:      GlobalMarkerIconSize,			// size of the icon
+		iconAnchor:    GlobalMarkerIconAnchor,			// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   GlobalMarkerIconPopupAnchor,		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: GlobalMarkerIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     GlobalMarkerShadowIconUrl,
+		shadowSize:    GlobalMarkerShadowSize,
+		shadowAnchor:  GlobalMarkerShadowAnchor,
 		});
 
 		// Stuff for CustomMarker
@@ -888,10 +829,14 @@
 		// Stuff for CustomMarkerIcon
 		var BambooShootIcon = L.icon({
 		iconUrl: 'markers/BambooShootMarker.png',
-		iconSize:      [18, 18],	// size of the icon
-		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
-		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
-		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		iconSize:      GlobalMarkerIconSize,			// size of the icon
+		iconAnchor:    GlobalMarkerIconAnchor,			// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   GlobalMarkerIconPopupAnchor,		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: GlobalMarkerIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     GlobalMarkerShadowIconUrl,
+		shadowSize:    GlobalMarkerShadowSize,
+		shadowAnchor:  GlobalMarkerShadowAnchor,
 		});
 
 		// Stuff for CustomMarker
@@ -917,10 +862,14 @@
 		// Stuff for CustomMarkerIcon
 		var MushroomIcon = L.icon({
 		iconUrl: 'markers/MushroomMarker.png',
-		iconSize:      [18, 18],	// size of the icon
-		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
-		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
-		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		iconSize:      GlobalMarkerIconSize,			// size of the icon
+		iconAnchor:    GlobalMarkerIconAnchor,			// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   GlobalMarkerIconPopupAnchor,		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: GlobalMarkerIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     GlobalMarkerShadowIconUrl,
+		shadowSize:    GlobalMarkerShadowSize,
+		shadowAnchor:  GlobalMarkerShadowAnchor,
 		});
 
 		// Stuff for CustomMarker
@@ -946,10 +895,14 @@
 		// Stuff for CustomMarkerIcon
 		var SweetFlowerIcon = L.icon({
 		iconUrl: 'markers/SweetFlowerMarker.png',
-		iconSize:      [18, 18],	// size of the icon
-		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
-		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
-		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		iconSize:      GlobalMarkerIconSize,			// size of the icon
+		iconAnchor:    GlobalMarkerIconAnchor,			// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   GlobalMarkerIconPopupAnchor,		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: GlobalMarkerIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     GlobalMarkerShadowIconUrl,
+		shadowSize:    GlobalMarkerShadowSize,
+		shadowAnchor:  GlobalMarkerShadowAnchor,
 		});
 
 		// Stuff for CustomMarker
@@ -975,10 +928,14 @@
 		// Stuff for CustomMarkerIcon
 		var DandelionSeedIcon = L.icon({
 		iconUrl: 'markers/DandelionSeedMarker.png',
-		iconSize:      [18, 18],	// size of the icon
-		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
-		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
-		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		iconSize:      GlobalMarkerIconSize,			// size of the icon
+		iconAnchor:    GlobalMarkerIconAnchor,			// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   GlobalMarkerIconPopupAnchor,		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: GlobalMarkerIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     GlobalMarkerShadowIconUrl,
+		shadowSize:    GlobalMarkerShadowSize,
+		shadowAnchor:  GlobalMarkerShadowAnchor,
 		});
 
 		// Stuff for CustomMarker
@@ -1004,10 +961,14 @@
 		// Stuff for CustomMarkerIcon
 		var MintIcon = L.icon({
 		iconUrl: 'markers/MintMarker.png',
-		iconSize:      [18, 18],	// size of the icon
-		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
-		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
-		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		iconSize:      GlobalMarkerIconSize,			// size of the icon
+		iconAnchor:    GlobalMarkerIconAnchor,			// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   GlobalMarkerIconPopupAnchor,		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: GlobalMarkerIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     GlobalMarkerShadowIconUrl,
+		shadowSize:    GlobalMarkerShadowSize,
+		shadowAnchor:  GlobalMarkerShadowAnchor,
 		});
 
 		// Stuff for CustomMarker
@@ -1033,10 +994,14 @@
 		// Stuff for CustomMarkerIcon
 		var BerryIcon = L.icon({
 		iconUrl: 'markers/BerryMarker.png',
-		iconSize:      [18, 18],	// size of the icon
-		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
-		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
-		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		iconSize:      GlobalMarkerIconSize,			// size of the icon
+		iconAnchor:    GlobalMarkerIconAnchor,			// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   GlobalMarkerIconPopupAnchor,		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: GlobalMarkerIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     GlobalMarkerShadowIconUrl,
+		shadowSize:    GlobalMarkerShadowSize,
+		shadowAnchor:  GlobalMarkerShadowAnchor,
 		});
 
 		// Stuff for CustomMarker
@@ -1062,10 +1027,14 @@
 		// Stuff for CustomMarkerIcon
 		var BirdEggIcon = L.icon({
 		iconUrl: 'markers/BirdEggMarker.png',
-		iconSize:      [18, 18],	// size of the icon
-		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
-		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
-		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		iconSize:      GlobalMarkerIconSize,			// size of the icon
+		iconAnchor:    GlobalMarkerIconAnchor,			// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   GlobalMarkerIconPopupAnchor,		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: GlobalMarkerIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     GlobalMarkerShadowIconUrl,
+		shadowSize:    GlobalMarkerShadowSize,
+		shadowAnchor:  GlobalMarkerShadowAnchor,
 		});
 
 		// Stuff for CustomMarker
@@ -1088,29 +1057,17 @@
 		// geoJSON URL'S
 		var JueyunChiliURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/JueyunChili.geojson"
 
-		/*
-		// Stuff for CircleMarker
-		function JueyunChiliMarker(feature, latlng){
-		let options = {
-		radius: 5,
-		fillColor: "red",			// JueyunChiliColor
-		color: "white",				// Stroke Color
-		weight: 1,					// Stroke Weight
-		opacity: 0.95,				// Stroke Opacity
-		fillOpacity: 0.95,
-		pane: 'CustomPane'			// To Adjust Z-Index
-		}
-		return L.circleMarker(latlng, options);
-		}
-		*/
-
 		// Stuff for CustomMarkerIcon
 		var JueyunChiliIcon = L.icon({
 		iconUrl: 'markers/JueyunChiliMarker.png',
-		iconSize:      [18, 18],	// size of the icon
-		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
-		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
-		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		iconSize:      GlobalMarkerIconSize,			// size of the icon
+		iconAnchor:    GlobalMarkerIconAnchor,			// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   GlobalMarkerIconPopupAnchor,		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: GlobalMarkerIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     GlobalMarkerShadowIconUrl,
+		shadowSize:    GlobalMarkerShadowSize,
+		shadowAnchor:  GlobalMarkerShadowAnchor,
 		});
 
 		// Stuff for CustomMarker
@@ -1133,29 +1090,17 @@
 		// geoJSON URL'S
 		var LotusHeadURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/LotusHead.geojson"
 
-		/*
-		// Stuff for CircleMarker
-		function LotusHeadMarker(feature, latlng){
-		let options = {
-		radius: 5,
-		fillColor: "yellowgreen",	// LotusHeadColor
-		color: "white",				// Stroke Color
-		weight: 1,					// Stroke Weight
-		opacity: 0.95,				// Stroke Opacity
-		fillOpacity: 0.95,
-		pane: 'CustomPane'			// To Adjust Z-Index
-		}
-		return L.circleMarker(latlng, options);
-		}
-		*/
-
 		// Stuff for CustomMarkerIcon
 		var LotusHeadIcon = L.icon({
 		iconUrl: 'markers/LotusHeadMarker.png',
-		iconSize:      [18, 18],	// size of the icon
-		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
-		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
-		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		iconSize:      GlobalMarkerIconSize,			// size of the icon
+		iconAnchor:    GlobalMarkerIconAnchor,			// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   GlobalMarkerIconPopupAnchor,		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: GlobalMarkerIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     GlobalMarkerShadowIconUrl,
+		shadowSize:    GlobalMarkerShadowSize,
+		shadowAnchor:  GlobalMarkerShadowAnchor,
 		});
 
 		// Stuff for CustomMarker
@@ -1178,29 +1123,17 @@
 		// geoJSON URL'S
 		var RawMeatURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/RawMeat.geojson"
 
-		/*
-		// Stuff for CircleMarker
-		function RawMeatMarker(feature, latlng){
-		let options = {
-		radius: 5,
-		fillColor: "salmon",	// RawMeatColor
-		color: "white",			// Stroke Color
-		weight: 1,				// Stroke Weight
-		opacity: 0.95,			// Stroke Opacity
-		fillOpacity: 0.95,
-		pane: 'CustomPane'		// To Adjust Z-Index
-		}
-		return L.circleMarker(latlng, options);
-		}
-		*/
-
 		// Stuff for CustomMarkerIcon
 		var RawMeatIcon = L.icon({
 		iconUrl: 'markers/RawMeatMarker.png',
-		iconSize:      [18, 18],	// size of the icon
-		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
-		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
-		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		iconSize:      GlobalMarkerIconSize,			// size of the icon
+		iconAnchor:    GlobalMarkerIconAnchor,			// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   GlobalMarkerIconPopupAnchor,		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: GlobalMarkerIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     GlobalMarkerShadowIconUrl,
+		shadowSize:    GlobalMarkerShadowSize,
+		shadowAnchor:  GlobalMarkerShadowAnchor,
 		});
 
 		// Stuff for CustomMarker
@@ -1223,29 +1156,17 @@
 		// geoJSON URL'S
 		var FowlURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/Fowl.geojson"
 
-		/*
-		// Stuff for CircleMarker
-		function FowlMarker(feature, latlng){
-		let options = {
-		radius: 5,
-		fillColor: "lightsalmon",	// Fowl Color
-		color: "white",				// Stroke Color
-		weight: 1,					// Stroke Weight
-		opacity: 0.95,				// Stroke Opacity
-		fillOpacity: 0.95,
-		pane: 'CustomPane'			// To Adjust Z-Index
-		}
-		return L.circleMarker(latlng, options);
-		}
-		*/
-
 		// Stuff for CustomMarkerIcon
 		var FowlIcon = L.icon({
 		iconUrl: 'markers/FowlMarker.png',
-		iconSize:      [18, 18],	// size of the icon
-		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
-		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
-		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		iconSize:      GlobalMarkerIconSize,			// size of the icon
+		iconAnchor:    GlobalMarkerIconAnchor,			// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   GlobalMarkerIconPopupAnchor,		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: GlobalMarkerIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     GlobalMarkerShadowIconUrl,
+		shadowSize:    GlobalMarkerShadowSize,
+		shadowAnchor:  GlobalMarkerShadowAnchor,
 		});
 
 		// Stuff for CustomMarker
@@ -1268,29 +1189,17 @@
 		// geoJSON URL'S
 		var FishURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/Fish.geojson"
 
-		/*
-		// Stuff for CircleMarker
-		function FishMarker(feature, latlng){
-		let options = {
-		radius: 5,
-		fillColor: "lightpink",	// FishColor
-		color: "white",			// Stroke Color
-		weight: 1,				// Stroke Weight
-		opacity: 0.95,			// Stroke Opacity
-		fillOpacity: 0.95,
-		pane: 'CustomPane'		// To Adjust Z-Index
-		}
-		return L.circleMarker(latlng, options);
-		}
-		*/
-
 		// Stuff for CustomMarkerIcon
 		var FishIcon = L.icon({
 		iconUrl: 'markers/FishMarker.png',
-		iconSize:      [18, 18],	// size of the icon
-		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
-		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
-		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		iconSize:      GlobalMarkerIconSize,			// size of the icon
+		iconAnchor:    GlobalMarkerIconAnchor,			// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   GlobalMarkerIconPopupAnchor,		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: GlobalMarkerIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     GlobalMarkerShadowIconUrl,
+		shadowSize:    GlobalMarkerShadowSize,
+		shadowAnchor:  GlobalMarkerShadowAnchor,
 		});
 
 		// Stuff for CustomMarker
@@ -1313,29 +1222,17 @@
 		// geoJSON URL'S
 		var CrabURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/Crab.geojson"
 
-		/*
-		// Stuff for CircleMarker
-		function CrabMarker(feature, latlng){
-		let options = {
-		radius: 5,
-		fillColor: "lightcoral",	// CrabColor
-		color: "white",				// Stroke Color
-		weight: 1,					// Stroke Weight
-		opacity: 0.95,				// Stroke Opacity
-		fillOpacity: 0.95,
-		pane: 'CustomPane'			// To Adjust Z-Index
-		}
-		return L.circleMarker(latlng, options);
-		}
-		*/
-
 		// Stuff for CustomMarkerIcon
 		var CrabIcon = L.icon({
 		iconUrl: 'markers/CrabMarker.png',
-		iconSize:      [18, 18],	// size of the icon
-		iconAnchor:    [9, 9],		// point of the icon which will correspond to marker's location (X & Y=split in half)
-		popupAnchor:   [0, 1],		// point from which the popup should open relative to the iconAnchor
-		tooltipAnchor: [0, -5]		// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		iconSize:      GlobalMarkerIconSize,			// size of the icon
+		iconAnchor:    GlobalMarkerIconAnchor,			// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   GlobalMarkerIconPopupAnchor,		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: GlobalMarkerIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     GlobalMarkerShadowIconUrl,
+		shadowSize:    GlobalMarkerShadowSize,
+		shadowAnchor:  GlobalMarkerShadowAnchor,
 		});
 
 		// Stuff for CustomMarker
@@ -1358,27 +1255,6 @@
 		// geoJSON URL'S
 		var EliteEnemiesURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/EliteEnemies.geojson"
 
-		/*
-		// Stuff for CircleMarker
-		function EliteEnemiesMarker(feature, latlng){
-		let options = {
-		radius: 5,
-		fillColor: "firebrick",	// EliteEnemiesColor
-		color: "white",			// Stroke Color
-		weight: 1,				// Stroke Weight
-		opacity: 0.95,			// Stroke Opacity
-		fillOpacity: 0.95,
-		pane: 'CustomPane'		// To Adjust Z-Index
-		}
-		return L.circleMarker(latlng, options);
-		}
-		*/
-
-		var EliteEnemiesIconSize 			= [27, 27]
-		var EliteEnemiesIconAnchor 			= [13.5, 13.5]
-		var EliteEnemiesIconPopupAnchor 	= [0, -12]
-		var EliteEnemiesIconTooltipAnchor 	= [0, -5]
-
 		// Stuff for CustomMarkerIcon
 		var EliteEnemiesIcon = L.icon({
 		iconUrl: 		'markers/enemies/EliteEnemiesMarker.png',
@@ -1386,6 +1262,10 @@
 		iconAnchor:   	 EliteEnemiesIconAnchor,		// point of the icon which will correspond to marker's location (X & Y=split in half)
 		popupAnchor:  	 EliteEnemiesIconPopupAnchor,	// point from which the popup should open relative to the iconAnchor
 		tooltipAnchor:   EliteEnemiesIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+
+		shadowUrl:     	 EliteEnemiesShadowIconUrl,
+		shadowSize:      EliteEnemiesShadowSize,
+		shadowAnchor:    EliteEnemiesShadowAnchor,
 		});
 
 		var MitachurlIcon = L.icon({
@@ -1394,6 +1274,10 @@
 		iconAnchor:   	 EliteEnemiesIconAnchor,		// point of the icon which will correspond to marker's location (X & Y=split in half)
 		popupAnchor:  	 EliteEnemiesIconPopupAnchor,	// point from which the popup should open relative to the iconAnchor
 		tooltipAnchor:   EliteEnemiesIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     	 EliteEnemiesShadowIconUrl,
+		shadowSize:      EliteEnemiesShadowSize,
+		shadowAnchor:    EliteEnemiesShadowAnchor,
 		});
 
 		var RuinGuardIcon = L.icon({
@@ -1402,6 +1286,10 @@
 		iconAnchor:   	 EliteEnemiesIconAnchor,		// point of the icon which will correspond to marker's location (X & Y=split in half)
 		popupAnchor:  	 EliteEnemiesIconPopupAnchor,	// point from which the popup should open relative to the iconAnchor
 		tooltipAnchor:   EliteEnemiesIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     	 EliteEnemiesShadowIconUrl,
+		shadowSize:      EliteEnemiesShadowSize,
+		shadowAnchor:    EliteEnemiesShadowAnchor,
 		});
 
 		var RuinGraderIcon = L.icon({
@@ -1410,6 +1298,10 @@
 		iconAnchor:   	 EliteEnemiesIconAnchor,		// point of the icon which will correspond to marker's location (X & Y=split in half)
 		popupAnchor:  	 EliteEnemiesIconPopupAnchor,	// point from which the popup should open relative to the iconAnchor
 		tooltipAnchor:   EliteEnemiesIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     	 EliteEnemiesShadowIconUrl,
+		shadowSize:      EliteEnemiesShadowSize,
+		shadowAnchor:    EliteEnemiesShadowAnchor,
 		});
 
 		var RuinHunterIcon = L.icon({
@@ -1418,6 +1310,10 @@
 		iconAnchor:   	 EliteEnemiesIconAnchor,		// point of the icon which will correspond to marker's location (X & Y=split in half)
 		popupAnchor:  	 EliteEnemiesIconPopupAnchor,	// point from which the popup should open relative to the iconAnchor
 		tooltipAnchor:   EliteEnemiesIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     	 EliteEnemiesShadowIconUrl,
+		shadowSize:      EliteEnemiesShadowSize,
+		shadowAnchor:    EliteEnemiesShadowAnchor,
 		});
 
 		var HydroAbyssMageIcon = L.icon({
@@ -1426,6 +1322,10 @@
 		iconAnchor:   	 EliteEnemiesIconAnchor,		// point of the icon which will correspond to marker's location (X & Y=split in half)
 		popupAnchor:  	 EliteEnemiesIconPopupAnchor,	// point from which the popup should open relative to the iconAnchor
 		tooltipAnchor:   EliteEnemiesIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     	 EliteEnemiesShadowIconUrl,
+		shadowSize:      EliteEnemiesShadowSize,
+		shadowAnchor:    EliteEnemiesShadowAnchor,
 		});
 
 		var CryoAbyssMageIcon = L.icon({
@@ -1434,6 +1334,10 @@
 		iconAnchor:   	 EliteEnemiesIconAnchor,		// point of the icon which will correspond to marker's location (X & Y=split in half)
 		popupAnchor:  	 EliteEnemiesIconPopupAnchor,	// point from which the popup should open relative to the iconAnchor
 		tooltipAnchor:   EliteEnemiesIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     	 EliteEnemiesShadowIconUrl,
+		shadowSize:      EliteEnemiesShadowSize,
+		shadowAnchor:    EliteEnemiesShadowAnchor,
 		});
 
 		var PyroAbyssMageIcon = L.icon({
@@ -1442,6 +1346,10 @@
 		iconAnchor:   	 EliteEnemiesIconAnchor,		// point of the icon which will correspond to marker's location (X & Y=split in half)
 		popupAnchor:  	 EliteEnemiesIconPopupAnchor,	// point from which the popup should open relative to the iconAnchor
 		tooltipAnchor:   EliteEnemiesIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     	 EliteEnemiesShadowIconUrl,
+		shadowSize:      EliteEnemiesShadowSize,
+		shadowAnchor:    EliteEnemiesShadowAnchor,
 		});
 
 		var FatuiPyroAgentIcon = L.icon({
@@ -1450,6 +1358,10 @@
 		iconAnchor:   	 EliteEnemiesIconAnchor,		// point of the icon which will correspond to marker's location (X & Y=split in half)
 		popupAnchor:  	 EliteEnemiesIconPopupAnchor,	// point from which the popup should open relative to the iconAnchor
 		tooltipAnchor:   EliteEnemiesIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     	 EliteEnemiesShadowIconUrl,
+		shadowSize:      EliteEnemiesShadowSize,
+		shadowAnchor:    EliteEnemiesShadowAnchor,
 		});
 
 		var FatuiElectroCicinMageIcon = L.icon({
@@ -1458,6 +1370,10 @@
 		iconAnchor:   	 EliteEnemiesIconAnchor,		// point of the icon which will correspond to marker's location (X & Y=split in half)
 		popupAnchor:  	 EliteEnemiesIconPopupAnchor,	// point from which the popup should open relative to the iconAnchor
 		tooltipAnchor:   EliteEnemiesIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     	 EliteEnemiesShadowIconUrl,
+		shadowSize:      EliteEnemiesShadowSize,
+		shadowAnchor:    EliteEnemiesShadowAnchor,
 		});
 
 		var FatuiCryoCicinMageIcon = L.icon({
@@ -1466,6 +1382,10 @@
 		iconAnchor:   	 EliteEnemiesIconAnchor,		// point of the icon which will correspond to marker's location (X & Y=split in half)
 		popupAnchor:  	 EliteEnemiesIconPopupAnchor,	// point from which the popup should open relative to the iconAnchor
 		tooltipAnchor:   EliteEnemiesIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     	 EliteEnemiesShadowIconUrl,
+		shadowSize:      EliteEnemiesShadowSize,
+		shadowAnchor:    EliteEnemiesShadowAnchor,
 		});
 
 		var GeovishapHatchlingIcon = L.icon({
@@ -1474,6 +1394,10 @@
 		iconAnchor:   	 EliteEnemiesIconAnchor,		// point of the icon which will correspond to marker's location (X & Y=split in half)
 		popupAnchor:  	 EliteEnemiesIconPopupAnchor,	// point from which the popup should open relative to the iconAnchor
 		tooltipAnchor:   EliteEnemiesIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     	 EliteEnemiesShadowIconUrl,
+		shadowSize:      EliteEnemiesShadowSize,
+		shadowAnchor:    EliteEnemiesShadowAnchor,
 		});
 
 		var StonehideLawachurlIcon = L.icon({
@@ -1482,6 +1406,10 @@
 		iconAnchor:   	 EliteEnemiesIconAnchor,		// point of the icon which will correspond to marker's location (X & Y=split in half)
 		popupAnchor:  	 EliteEnemiesIconPopupAnchor,	// point from which the popup should open relative to the iconAnchor
 		tooltipAnchor:   EliteEnemiesIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     	 EliteEnemiesShadowIconUrl,
+		shadowSize:      EliteEnemiesShadowSize,
+		shadowAnchor:    EliteEnemiesShadowAnchor,
 		});
 
 		var FrostarmLawachurlIcon = L.icon({
@@ -1490,6 +1418,10 @@
 		iconAnchor:   	 EliteEnemiesIconAnchor,		// point of the icon which will correspond to marker's location (X & Y=split in half)
 		popupAnchor:  	 EliteEnemiesIconPopupAnchor,	// point from which the popup should open relative to the iconAnchor
 		tooltipAnchor:   EliteEnemiesIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     	 EliteEnemiesShadowIconUrl,
+		shadowSize:      EliteEnemiesShadowSize,
+		shadowAnchor:    EliteEnemiesShadowAnchor,
 		});
 
 		// Stuff for CustomMarker
@@ -1526,8 +1458,6 @@
 
 		// FarmRouteEliteEnemiesGroup
     	var FarmRouteEliteEnemiesGroup = L.layerGroup([
-    	Teleport,
-    	Statue,
     	EliteEnemies,
     	FarmRouteEliteEnemies,
     	])
@@ -1557,13 +1487,12 @@
     	ElectroCrystal,
     	NoctilucousJade,
     	CorLapis,
+    	MagicalCrystalChunk,
     	CrystalChunk,
     	WhiteIronChunk,
-    	Teleport,
-    	Statue,
     	Domain,
     	Cave,
-    	FarmRouteMineral,
+		FarmRouteMineral,
     	])
 
 	//----------------------------------------------------------------------------------------------------------------------
@@ -1588,9 +1517,6 @@
 
 		// FarmRouteArtifactGroup
     	var FarmRouteArtifactGroup = L.layerGroup([
-    	Teleport,
-    	Statue,
-    	Cave,
     	ArtifactFodder,
     	FarmRouteArtifact,
     	])
@@ -1602,6 +1528,8 @@
 
 		// Add to map on load
     	var DefaultShow = L.layerGroup([
+    	Teleport,
+    	Statue,
     	FarmRouteEliteEnemiesGroup,
     	])
 
@@ -1614,7 +1542,9 @@
 		"Domain"										: Domain,
 		"Cave"											: Cave,
 		"Chest"											: Chest,
-		"Artifact Fodder"								: ArtifactFodder,
+		"Artifact Fodder"								: FarmRouteArtifactGroup,
+		"Elite Enemies"									: FarmRouteEliteEnemiesGroup,
+		"Farm Route Mineral"							: FarmRouteMineralGroup,
 		"Electro Crystal"								: ElectroCrystal,
 		"Noctilucous Jade"								: NoctilucousJade,
 		"Cor Lapis"										: CorLapis,
@@ -1623,6 +1553,8 @@
 		"White Iron Chunk"								: WhiteIronChunk,
 		"Wolfhook"										: Wolfhook,
 		"Small Lamp Grass"								: SmallLampGrass,
+		"Valberry"										: Valberry,
+		"Cecilia"										: Cecilia,
 		"Starconch"										: Starconch,
 		"Bamboo Shoot"									: BambooShoot,
 		"Mushroom"										: Mushroom,
@@ -1637,10 +1569,6 @@
 		"Fowl"											: Fowl,
 		"Fish"											: Fish,
 		"Crab"											: Crab,
-		"Elite Enemies"									: EliteEnemies,
-		"Farm Route - Elite Enemies"					: FarmRouteEliteEnemiesGroup,
-		"Farm Route - Mineral"							: FarmRouteMineralGroup,
-		"Farm Route - Artifact"							: FarmRouteArtifactGroup,
 		}
 
 		var layerControl = L.control.layers(null, mapOverlays, {position:'topleft'}).addTo(map);
