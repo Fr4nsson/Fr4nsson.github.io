@@ -1017,7 +1017,7 @@
 		var Berry 			= new L.GeoJSON.AJAX([BerryURL],{pointToLayer:BerryMarker,onEachFeature:oef});
 
 	//----------------------------------------------------------------------------------------------------------------------
-	//----------------------------------------------- Bird Egg -------------------------------------------------------------
+	//------------------------------------------------ Bird Egg ------------------------------------------------------------
 	//----------------------------------------------------------------------------------------------------------------------
 	//-Expand/Minimize
 
@@ -1048,6 +1048,39 @@
 
 		// Load .geoJSON
 		var BirdEgg 			= new L.GeoJSON.AJAX([BirdEggURL],{pointToLayer:BirdEggMarker,onEachFeature:oef});
+
+	//----------------------------------------------------------------------------------------------------------------------
+	//------------------------------------------------ Qingxin -------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// geoJSON URL'S
+		var QingxinURL 			= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/Qingxin.geojson"
+
+		// Stuff for CustomMarkerIcon
+		var QingxinIcon = L.icon({
+		iconUrl: 'markers/QingxinMarker.png',
+		iconSize:      GlobalMarkerIconSize,			// size of the icon
+		iconAnchor:    GlobalMarkerIconAnchor,			// point of the icon which will correspond to marker's location (X & Y=split in half)
+		popupAnchor:   GlobalMarkerIconPopupAnchor,		// point from which the popup should open relative to the iconAnchor
+		tooltipAnchor: GlobalMarkerIconTooltipAnchor,	// The coordinates of the point from which tooltips will "open", relative to the icon anchor.
+		
+		shadowUrl:     GlobalMarkerShadowIconUrl,
+		shadowSize:    GlobalMarkerShadowSize,
+		shadowAnchor:  GlobalMarkerShadowAnchor,
+		});
+
+		// Stuff for CustomMarker
+		function QingxinMarker(feature, latlng){
+		let options = {
+		opacity: 1,					// Marker Opacity
+		pane: 'CustomPane'			// To Adjust Z-Index
+		}
+		return L.marker(latlng, {icon: QingxinIcon});
+		}
+
+		// Load .geoJSON
+		var Qingxin 			= new L.GeoJSON.AJAX([QingxinURL],{pointToLayer:QingxinMarker,onEachFeature:oef});
 
 	//----------------------------------------------------------------------------------------------------------------------
 	//--------------------------------------------- Jueyun Chili -----------------------------------------------------------
@@ -1505,7 +1538,7 @@
 
 		// Stuff for lines
 		var FarmRouteArtifactLines = {
-    	"color": "firebrick",
+    	"color": "LightGreen",
     	"weight": 4,
     	"dashArray": 8,
     	"dashSpeed": -30,
@@ -1522,6 +1555,32 @@
     	])
 
 	//----------------------------------------------------------------------------------------------------------------------
+	//----------------------------------------- Farm Route - Qingxin -------------------------------------------------------
+	//----------------------------------------------------------------------------------------------------------------------
+	//-Expand/Minimize
+
+		// geoJSON URL'S
+		var FarmRouteQingxinURL	= "https://raw.githubusercontent.com/Fr4nsson/GMap/main/geojson/FarmRouteQingxin.geojson"
+
+		// Stuff for lines
+		var FarmRouteQingxinLines = {
+    	"color": "LightGreen",
+    	"weight": 4,
+    	"dashArray": 8,
+    	"dashSpeed": -30,
+    	"opacity": 0.95
+		};
+
+		// Load .geoJSON
+		var FarmRouteQingxin 		= new L.GeoJSON.AJAX([FarmRouteQingxinURL],{style:FarmRouteQingxinLines,onEachFeature:oef});
+
+		// FarmRouteQingxinGroup
+    	var FarmRouteQingxinGroup = L.layerGroup([
+    	Qingxin,
+    	FarmRouteQingxin,
+    	])
+
+	//----------------------------------------------------------------------------------------------------------------------
 	//----------------------------------------------- Overlays -------------------------------------------------------------
 	//----------------------------------------------------------------------------------------------------------------------
 	//-Expand/Minimize
@@ -1530,6 +1589,7 @@
     	var DefaultShow = L.layerGroup([
     	Teleport,
     	Statue,
+    	Domain,
     	FarmRouteEliteEnemiesGroup,
     	])
 
@@ -1564,6 +1624,7 @@
 		"Berry"											: Berry,
 		"Bird Egg"										: BirdEgg,
 		"Jueyun Chili"									: JueyunChili,
+		"Qingxin"										: FarmRouteQingxinGroup,
 		"Lotus Head"									: LotusHead,
 		"Raw Meat"										: RawMeat,
 		"Fowl"											: Fowl,
